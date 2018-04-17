@@ -33,23 +33,25 @@ def check_hotspot_active():
 def status_hotspot_autoconnect():
     try:
         if not hotspot_exists():
-            return False
+            return -1
         lines: List[str] = subprocess.check_output(shlex.split(
             command_list_connections)).decode().split('\n')
         for line in lines:
             if line.find('connection.autoconnect') is not -1:
                 if line.find('yes') is not -1:
                     return True
+                else:
+                    return False
         else:
-            return False
+            return -1
     except subprocess.CalledProcessError as error:
-        return False
+        return -1
 
 
 def set_autoconnect(value: bool):
     if not hotspot_exists():
         return "Error"
-    command = "sudo nmcli connection modify Hotspot" +\
+    command = "nmcli connection modify Hotspot" +\
         " connection.autoconnect {}".format(
             str(value).upper())
     try:
