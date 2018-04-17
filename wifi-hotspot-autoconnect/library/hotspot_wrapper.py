@@ -49,6 +49,8 @@ def status_hotspot_autoconnect():
 
 
 def set_autoconnect(value: bool):
+    if not isinstance(value, bool):
+        raise TypeError()
     if not hotspot_exists():
         return "Error"
     command = "nmcli connection modify Hotspot" +\
