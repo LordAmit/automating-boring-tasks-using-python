@@ -1,4 +1,4 @@
-#Wifi Hotspot Autoconnect
+# Wifi Hotspot Autoconnect
 
 Problem:
 Hotspot gets turned off when laptop goes to sleep. I have to click here and there to have it start again. On the other hand, if I set it to autoconnect via GUI, it will always turn on hotspot by default even when I do not want to.
