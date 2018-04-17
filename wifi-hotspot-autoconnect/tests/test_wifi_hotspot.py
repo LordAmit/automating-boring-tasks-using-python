@@ -21,3 +21,6 @@ class Test_Wifi_Hotspot(unittest.TestCase):
     def test_hotspot_set_autoconnect_boolean(self):
         self.test_hotspot_set_autoconnect_true()
         self.test_hotspot_set_autoconnect_false()
+
+    def test_hotspot_set_autoconnect_incorrect(self):
+        self.assertRaises(TypeError, wifi.autoconnect_set, None)
