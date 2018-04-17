@@ -9,3 +9,15 @@ class Test_Wifi_Hotspot(unittest.TestCase):
 
     def test_hotspot_autoconnect_value(self):
         self.assertIn(wifi.autoconnect_status(), {True, False})
+
+    def test_hotspot_set_autoconnect_true(self):
+        wifi.autoconnect_set(True)
+        self.assertTrue(wifi.autoconnect_status())
+
+    def test_hotspot_set_autoconnect_false(self):
+        wifi.autoconnect_set(False)
+        self.assertFalse(wifi.autoconnect_status())
+
+    def test_hotspot_set_autoconnect_boolean(self):
+        self.test_hotspot_set_autoconnect_true()
+        self.test_hotspot_set_autoconnect_false()
