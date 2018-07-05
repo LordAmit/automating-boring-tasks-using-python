@@ -19,7 +19,10 @@ class Image_Note(QtGui.QMainWindow, gui_window.Ui_MainWindow):
         file_address = QtGui.QFileDialog.getOpenFileName(
             self, 'Open Image File')
         print(file_address)
-
+        graphics_scene = QGraphicsScene()
+        graphics_scene.addPixmap(QPixmap(file_address))
+        self.graphicsView.setScene(graphics_scene)
+        self.graphicsView.show()
 
 def main():
     app = QtGui.QApplication(sys.argv)
