@@ -25,9 +25,9 @@
        </widget>
       </item>
       <item row="1" column="0">
-       <widget class="QPushButton" name="button_bw">
+       <widget class="QPushButton" name="button_reset">
         <property name="text">
-         <string>Sensitivity</string>
+         <string>Reset</string>
         </property>
        </widget>
       </item>

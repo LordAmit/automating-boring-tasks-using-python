@@ -36,9 +36,9 @@ class Ui_MainWindow(object):
         self.slider.setOrientation(QtCore.Qt.Horizontal)
         self.slider.setObjectName(_fromUtf8("slider"))
         self.gridLayout_2.addWidget(self.slider, 1, 2, 1, 1)
-        self.button_bw = QtGui.QPushButton(self.centralwidget)
-        self.button_bw.setObjectName(_fromUtf8("button_bw"))
-        self.gridLayout_2.addWidget(self.button_bw, 1, 0, 1, 1)
+        self.button_reset = QtGui.QPushButton(self.centralwidget)
+        self.button_reset.setObjectName(_fromUtf8("button_reset"))
+        self.gridLayout_2.addWidget(self.button_reset, 1, 0, 1, 1)
         self.graphicsView = QtGui.QGraphicsView(self.centralwidget)
         self.graphicsView.setObjectName(_fromUtf8("graphicsView"))
         self.gridLayout_2.addWidget(self.graphicsView, 0, 0, 1, 3)
@@ -56,7 +56,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(_translate("MainWindow", "Image Note Scanner", None))
-        self.button_bw.setText(_translate("MainWindow", "Sensitivity", None))
+        self.button_reset.setText(_translate("MainWindow", "Reset", None))
         self.button_save.setText(_translate("MainWindow", "Save", None))
         self.button_browse.setText(_translate("MainWindow", "Browse", None))
 
