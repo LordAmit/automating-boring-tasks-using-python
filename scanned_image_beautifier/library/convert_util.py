@@ -13,7 +13,8 @@ def convert_sample(input_image_address: str, output_image_address, threshold: in
     print("completed sample conversion")
 
 
-def convert_full_image(input_image_address: str, output_image_address, threshold: int):
+def convert_full_image(input_image_address: str,
+                       output_image_address, threshold: int):
     command = "convert -density 600 {} -threshold {}% -type bilevel -compress fax {}".format(
         input_image_address, threshold, output_image_address)
     subprocess.check_output(shlex.split(command))

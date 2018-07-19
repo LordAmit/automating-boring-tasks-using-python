@@ -45,7 +45,7 @@ class Image_Note(QtGui.QMainWindow, gui_window.Ui_MainWindow):
         print(value)
         self.thumbnail_image = Image.open(self.thumbnail_address)
         self.thumbnail_address_converted = \
-            file_handler.filepath_modified_prefix(
+            file_handler.filepath_modified_suffix(
                 self.thumbnail_address)
         convert_util.convert_sample(
             self.thumbnail_address, self.thumbnail_address_converted, value)
@@ -73,10 +73,10 @@ class Image_Note(QtGui.QMainWindow, gui_window.Ui_MainWindow):
         self.file_address = QtGui.QFileDialog.getOpenFileName(
             self, 'Open Image File')
         self.graphics_scene = QGraphicsScene()
-        self.thumbnail_address: str = file_handler.filepath_modified_prefix(
-            self.file_address, "thumbnail_")
+        self.thumbnail_address: str = file_handler.filepath_modified_suffix(
+            self.file_address, "_thumbnail")
         self.modified_image_address: str = \
-            file_handler.filepath_modified_prefix(self.file_address)
+            file_handler.filepath_modified_suffix(self.file_address)
         image_handler.save_thumbnail(Image.open(
             self.file_address), self.thumbnail_address)
         self.visibility_widgets(True)
