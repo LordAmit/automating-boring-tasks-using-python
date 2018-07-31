@@ -3,7 +3,6 @@ import os
 
 
 def extract_filename_wo_ext(address: str) -> str:
-    basename = path.basename(address)
     return path.splitext(path.basename(address))[0]
 
 
@@ -29,3 +28,9 @@ def check_ext(ext: str):
 
 def remove_file(address: str):
     os.remove(address)
+
+
+def change_path_extension(absolute_path_image: str, extension: str) ->str:
+    address_dir: str = extract_dir(absolute_path_image)
+    filename: str = extract_filename_wo_ext(absolute_path_image)
+    return str(address_dir+filename + extension)
