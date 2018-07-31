@@ -20,6 +20,8 @@ class Image_Note(QtGui.QMainWindow, gui_window.Ui_MainWindow):
         super(Image_Note, self).__init__(parent)
         self.setupUi(self)
         self.button_browse.clicked.connect(self.browse_file)
+        self.button_browse_pdf.clicked.connect(self.browse_pdf_file)
+
         self.slider.setMinimum(0)
         self.slider.setMaximum(100)
         self.slider.setValue(40)
@@ -27,13 +29,13 @@ class Image_Note(QtGui.QMainWindow, gui_window.Ui_MainWindow):
         self.slider.valueChanged.connect(self.sensitivity_slider)
         self.button_delete.clicked.connect(self.remove_residual_images)
         self.button_save.clicked.connect(self.save_image)
-
+        self.button_pdf_save.clicked.connect(self.save_pdf)
         self.visibility_widgets()
 
     def visibility_widgets(self,
                            disable: bool = False):
         self.all_widgets = [self.button_delete,
-                            self.button_grayscale, self.button_reset,
+                            self.button_pdf_save, self.button_reset,
                             self.button_save, self.slider]
 
         for widget in self.all_widgets:
@@ -64,30 +66,50 @@ class Image_Note(QtGui.QMainWindow, gui_window.Ui_MainWindow):
         value = self.slider.value()
         convert_util.convert_full_image(
             self.file_address, self.modified_image_address, value)
-        # self.remove_residual_images()
 
-    def grayscale_convert(self):
-        pass
+    def save_pdf(self):
+        import os
+        if not os.path.exists(self.modified_image_address):
+            self.save_image()
+        convert_util.convert_image_to_pdf(
+            self.modified_image_address,
+            file_handler.change_path_extension(
+                self.modified_image_address, ".pdf"))
+
+    # def pdf_convert(self):
+    #     self.save_image()
+    #     convert_util.convert_image_to_pdf(self.modified_image_address,
+    #                                       file_handler.change_path_extension(  # noqa
+    #                                           self.modified_image_address,
+    #                                           ".pdf"))
+
+    def browse_pdf_file(self):
+        self.pdf_file_address = QtGui.QFileDialog.getOpenFileName(
+            self, 'Open PDF File')
+        self.file_address = file_handler.change_path_extension(
+            self.pdf_file_address, ".png")
+        convert_util.convert_pdf_to_image(
+            self.pdf_file_address, self.file_address)
+        self.process_file()
 
     def browse_file(self):
         self.file_address = QtGui.QFileDialog.getOpenFileName(
             self, 'Open Image File')
-        self.graphics_scene = QGraphicsScene()
+        self.process_file()
+
+    def process_file(self):
         self.thumbnail_address: str = file_handler.filepath_modified_suffix(
             self.file_address, "_thumbnail")
         self.modified_image_address: str = \
-            file_handler.filepath_modified_suffix(self.file_address)
+            file_handler.filepath_modified_suffix(
+                self.file_address)
         image_handler.save_thumbnail(Image.open(
             self.file_address), self.thumbnail_address)
         self.visibility_widgets(True)
-        # pixmap = QPixmap(file_address).scaledToWidth(200)
-        # pixmap.save("ssomething.jpg")
-        # self.graphics_scene.addPixmap(QPixmap(self.thumbnail_address))
-        # self.graphicsView.setScene(self.graphics_scene)
-        # self.graphicsView.show()
         self.load_graphics_image(self.thumbnail_address)
 
     def load_graphics_image(self, image_address: str):
+        self.graphics_scene = QGraphicsScene()
         self.graphics_scene.addPixmap(QPixmap(image_address))
         self.graphicsView.setScene(self.graphics_scene)
 
