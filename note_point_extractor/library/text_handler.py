@@ -2,15 +2,16 @@ from typing import List
 
 corestring = """Extracted Annotations (7/13/2018, 9:14:41 PM)
 sample notes extracted from PDF
-#g asd asd asd g#
+#g eita ek  
+line g#
 #b  asd asd
 asd b#
 #p asd asd asd p#
 #i asd asd asd i#
 #g asd asd asd g#
 #b asd asd asd b#
-#p asd asd
- asd p#
+#p point point
+point p#
 
 """
 
@@ -26,7 +27,7 @@ def __count_all_tags(text: str) -> int:
         __count_tags(text, "#p", "p#") + __count_tags(text, "#c", "c#")
 
 
-def __find_tag(text: str):
+def __find_start_tag_in_line(text: str):
     if list(tag_pairs)[0] in text:
         return list(tag_pairs)[0]
     if list(tag_pairs)[1] in text:
@@ -37,31 +38,8 @@ def __find_tag(text: str):
         return list(tag_pairs)[3]
 
 
-# all_lines: List[str] = corestring.splitlines()
-
-# good_points: List[str] = []
-# bad_points: List[str] = []
-# comments: List[str] = []
-# i_points: List[str] = []
-# all_comments = {"b#": bad_points, "g#": good_points,
-#                 "c#": comments, "p#": i_points}
-
-# flag = False
-# end_tag: str = ""
-# for line in all_lines:
-#     if list(tag_pairs)[0] in line or list(tag_pairs)[1] in line or \
-#             list(tag_pairs)[2] in line or list(tag_pairs)[3] in line:
-#         flag = True
-#         end_tag = tag_pairs[__find_tag(line)]
-#     if flag:
-#         all_comments[end_tag].append(line)
-#     if end_tag in line:
-#         flag = False
-
-
 def __beautify_output_lines(lines: List[str], tag_type: str, start_tag: str,
-                            markdown: bool = False)->str:
-    print(len(lines))
+                            markdown: bool = False) -> str:
     if len(lines) < 1:
         print("no lines found, exiting")
         return ""
@@ -69,18 +47,32 @@ def __beautify_output_lines(lines: List[str], tag_type: str, start_tag: str,
     if markdown:
         combined_line = "# " + combined_line
     combined_line += "\n"
+    end_tag: str = tag_pairs[start_tag]
     for line in lines:
-        line = line.replace(start_tag, "")
-        line = line.replace(tag_pairs[start_tag], "")
-        line = line.strip()
-        if markdown:
-            combined_line += "- " + line + "\n"
-        else:
-            combined_line += line + "\n"
-    return combined_line
+
+        is_end_tag_in_line: bool = line.find(end_tag) != -1
+        is_start_tag_in_line: bool = line.find(start_tag) != -1
+
+        # print(line + ": " + str(is_end_tag_in_line))
+        if is_start_tag_in_line and markdown:
+            combined_line += "-"
+        # line = line.replace("\n", "")
+        combined_line += " " + line.strip()
+        if is_end_tag_in_line:
+            combined_line += "\n"
+        combined_line = combined_line.replace(start_tag, "")
+        combined_line = combined_line.replace(end_tag, "")
+        combined_line = combined_line.replace("  ", " ")
+    return "\n"+combined_line
 
 
-def process_content(value: str, markdown: bool=False)->str:
+def __start_tag_in_line(line: str):
+    global tag_pairs
+    return list(tag_pairs)[0] in line or list(tag_pairs)[1] in line or \
+        list(tag_pairs)[2] in line or list(tag_pairs)[3] in line
+
+
+def process_content(value: str, markdown: bool=False) -> str:
     global tag_pairs
     tag_count = __count_all_tags(value)
     if tag_count % 2 is not 0:
@@ -93,25 +85,31 @@ def process_content(value: str, markdown: bool=False)->str:
     i_points: List[str] = []
     all_comments = {"b#": bad_points, "g#": good_points,
                     "c#": comments, "p#": i_points}
-    flag = False
+    is_looking_for_end_tag = False
     end_tag: str = ""
     for line in all_lines:
-        if list(tag_pairs)[0] in line or list(tag_pairs)[1] in line or \
-                list(tag_pairs)[2] in line or list(tag_pairs)[3] in line:
-            flag = True
-            end_tag = tag_pairs[__find_tag(line)]
-        if flag:
+        # print("processing: "+line)
+        if __start_tag_in_line(line):
+            is_looking_for_end_tag = True
+            end_tag = tag_pairs[__find_start_tag_in_line(line)]
+        if is_looking_for_end_tag:
+            # print("looking for end tag: " + line)
             all_comments[end_tag].append(line)
         if end_tag in line:
-            flag = False
+            # print("found end tag: " + line)
+            is_looking_for_end_tag = False
     full_content: str = __beautify_output_lines(
-        good_points, "Good Points", "#g", markdown) + "\n"
+        good_points, "Good Points", "#g", markdown)
     full_content += __beautify_output_lines(bad_points,
                                             "Bad Points",
-                                            "#b", markdown) + "\n"
+                                            "#b", markdown)
     full_content += __beautify_output_lines(comments,
-                                            "Comments", "#c", markdown) + "\n"
+                                            "Comments", "#c", markdown)
     full_content += __beautify_output_lines(i_points,
                                             "Intersting Points",
-                                            "#p", markdown) + "\n"
+                                            "#p", markdown)
     return full_content
+
+
+if __name__ == "__main__":
+    print(process_content(corestring, markdown=True))
