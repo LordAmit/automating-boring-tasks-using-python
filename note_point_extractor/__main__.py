@@ -4,9 +4,8 @@ from PyQt4.QtGui import *
 
 import sys
 
-
-from .gui import gui
-from .library import text_handler
+from gui import gui
+from library import text_handler
 
 
 class NoteExtractor(QtGui.QMainWindow, gui.Ui_MainWindow):

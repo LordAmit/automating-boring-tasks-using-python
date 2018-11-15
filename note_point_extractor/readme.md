@@ -3,5 +3,5 @@
 ## Running
 
 ```
-    python3 -m note_point_extractor
+    python3 note_point_extractor
 ```
