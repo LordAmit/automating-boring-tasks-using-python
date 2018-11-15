@@ -1,17 +1,19 @@
 from PyQt4 import QtGui
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
-import sys
-import gui
 
-from library import text_handler
+import sys
+
+
+from .gui import gui
+from .library import text_handler
 
 
 class NoteExtractor(QtGui.QMainWindow, gui.Ui_MainWindow):
     def __init__(self, parent=None):
         super(NoteExtractor, self).__init__(parent)
         self.setupUi(self)
-        self.button_output.clicked.connect(self.output_function)
+        self.button_output. clicked.connect(self.output_function)
         self.button_markdown_output.clicked.connect(
             self.output_markdown_function)
 
@@ -23,10 +25,10 @@ class NoteExtractor(QtGui.QMainWindow, gui.Ui_MainWindow):
         content = self.getcontents()
         self.setcontents(text_handler.process_content(content, True))
 
-    def getcontents(self)->str:
+    def getcontents(self) -> str:
         return self.textEdit_input.toPlainText()
 
-    def setcontents(self, value: str)->None:
+    def setcontents(self, value: str) -> None:
         self.textedit_output.setText(value)
 
 
