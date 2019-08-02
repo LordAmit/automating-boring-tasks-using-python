@@ -18,7 +18,7 @@ class MainWidget(QWidget):
 
         # text widget
         self._line_edit = QLineEdit("TEXT HERE")
-        
+
         # add widgets to layout
         self.layout.addWidget(self.top)
         self.layout.addWidget(self.image)
