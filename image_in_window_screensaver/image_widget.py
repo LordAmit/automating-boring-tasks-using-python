@@ -1,5 +1,5 @@
 from PySide2.QtWidgets import QWidget, QLabel, QHBoxLayout, QLineEdit
-from PySide2.QtGui import QPixmap
+from PySide2.QtGui import QPixmap, QMouseEvent
 from PySide2.QtCore import Qt
 import sys
 import time
@@ -26,6 +26,7 @@ class ImageWidget(QWidget):
         # self._set_image(self._current_index)
         self._layout.addWidget(self._image_label)
         self.setLayout(self._layout)
+
 
     def image_shuffle(self):
         l.log("shuffle")
@@ -64,3 +65,9 @@ class ImageWidget(QWidget):
 
     def set_line_edit(self, edit_line: QLineEdit):
         self._line_edit = edit_line
+
+    def mousePressEvent(self, event: QMouseEvent):
+        if event.button() == Qt.MouseButton.LeftButton:
+            self.image_next()
+        elif event.button() == Qt.MouseButton.RightButton:
+            self.image_previous()
