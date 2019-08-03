@@ -19,7 +19,10 @@ def walk(path: str) -> List:
         exit()
     for folderName, subfolders, filenames in os.walk(path):
         for filename in filenames:
-            if filename.endswith('jpg') or filename.endswith('.png'):
+            if (filename.endswith('jpg') or
+                    filename.endswith('.png') or
+                    filename.endswith('.bmp') or
+                    filename.endswith('.jpeg')):
                 file_path = os.path.join(folderName, filename)
 
                 l.log([file_path, filename])
