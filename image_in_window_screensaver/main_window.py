@@ -1,8 +1,11 @@
 from PySide2.QtWidgets import (QMainWindow, QApplication)
-from main_level_widget import MainWidget
+
 import custom_log as l
+from main_level_widget import MainWidget
+
 
 class MainWindow(QMainWindow):
+
     def __init__(self, widget):
         QMainWindow.__init__(self)
         self.setWindowTitle("Amit's Image Viewer")
@@ -21,6 +24,7 @@ class MainWindow(QMainWindow):
 if __name__ == '__main__':
     l.disable()
     import sys
+
     app = QApplication(sys.argv)
     widget = MainWidget()
     # widget = TopLevelWidget()
