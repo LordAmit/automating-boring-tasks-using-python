@@ -71,3 +71,6 @@ class ImageWidget(QWidget):
             self.image_next()
         elif event.button() == Qt.MouseButton.RightButton:
             self.image_previous()
+
+    def get_current_image_path_str(self)->str:
+        return self._all_images[self._current_index]
