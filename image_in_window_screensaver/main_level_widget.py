@@ -1,5 +1,5 @@
 from PySide2.QtWidgets import QWidget, QVBoxLayout, QLineEdit
-
+from PySide2.QtCore import Slot
 from image_widget import ImageWidget
 from top_level_widget import TopLevelWidget
 
@@ -11,7 +11,7 @@ class MainWidget(QWidget):
 
         # top bar widget
         self.top = TopLevelWidget()
-        self.top.setFixedHeight(50)
+        self.top.setFixedHeight(70)
 
         # image widget
         self.image = ImageWidget()
@@ -29,3 +29,4 @@ class MainWidget(QWidget):
         self.image.set_line_edit(self._line_edit)
 
         self.setLayout(self.layout)
+
