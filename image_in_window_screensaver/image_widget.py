@@ -20,7 +20,8 @@ class ImageWidget(QWidget):
         self._line_edit: QLineEdit = None
         random.seed(self._seed)
 
-        self._all_images: List = file_walker.walk(sys.argv[1])
+        # self._all_images: List = file_walker.walk(sys.argv[1])
+        self._all_images: List = file_walker.walk()
         self._current_index = 0
         self.image_shuffle()
         # self._set_image(self._current_index)
@@ -50,7 +51,8 @@ class ImageWidget(QWidget):
     def image_delete(self):
         l.log("delete: " + self._all_images[self._current_index])
         send2trash(self._all_images[self._current_index])
-        self._all_images: List = file_walker.walk(sys.argv[1])
+        # self._all_images: List = file_walker.walk(sys.argv[1])
+        self._all_images: List = file_walker.walk()
         self.image_shuffle()
 
     def _set_image(self, index):
