@@ -20,9 +20,8 @@ def check_line(line: str, rules_packs: List):
             regex = re.compile(r"\b{}\b".format(keyword))
             if len(regex.findall(line)) != 0:
                 print("""
-                issue found: {}
+                issue type: {}, issue: {} 
                 line: {}
-                issue: {}
-                replace with: {}""".format(rule_name, line, keyword, rule[1:]))
-                count_issues+=1
+                replace with: {}""".format(rule_name, keyword, line, rule[1:]))
+                count_issues += 1
     return count_issues

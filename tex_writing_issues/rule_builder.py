@@ -13,7 +13,6 @@ def _build_rules(rule_names: List) -> List:
     path_rules = "/home/amit/git/automating-boring-tasks-using-python/tex_writing_issues/"
     all_rules: List = []
     for rule_name in rule_names:
-
         l.log("working with rule: " + rule_name)
         f_rule = path_rules + "words_" + rule_name
         l.log("rule file name: " + f_rule)

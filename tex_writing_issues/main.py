@@ -14,26 +14,34 @@ def will_i_process_line(line: str) -> bool:
         return True
 
 
+def process_file(file_path: str, all_rules: List):
+    count_issues: int = 0
+    print("at file: " + file_path)
+    lines: List[str] = open(file_path).readlines()
+    for line in lines:
+        if will_i_process_line(line):
+            line_issues = line_checker.check_line(line, all_rules)
+            count_issues += line_issues
+    print("done with: " + file_path)
+    print("total issues found: " + str(count_issues))
+
+
 if __name__ == '__main__':
     import folder_walk as walk
     import argument_handler as argh
     from typing import List
 
     l.disable()
-
-    keyword = argh.get_keyword()
-    l.log("started parsing directories")
-    file_paths: List[str] = walk.walk()
-    l.log("will start scanning files now.")
     all_rules = rule_builder.get_rules()
-
-    for file_path in file_paths:
-        count_issues: int = 0
-        print("at file: " + file_path)
-        lines: List[str] = open(file_path).readlines()
-        for line in lines:
-            if will_i_process_line(line):
-                line_issues = line_checker.check_line(line, all_rules)
-                count_issues += line_issues
-        print("done with: " + file_path)
-        print("total issues found: " + str(count_issues))
+    if argh.get_file_path() is not None:
+        print("single file given : "+argh.get_file_path())
+        l.log("single file input")
+        process_file(argh.get_file_path(), all_rules)
+    elif argh.get_dir_path() is not None:
+        l.log("directory is given. scanning files from directory")
+        file_paths: List[str] = walk.walk()
+        for file_path in file_paths:
+            process_file(file_path, all_rules)
+            print()
+    else:
+        print("neither path nor file was declared. Run with -h switch for help")

@@ -12,7 +12,7 @@ def walk() -> List:
     :return: List of string path of images
     """
     file_paths = []
-    path: str = argh.get_path()
+    path: str = argh.get_dir_path()
     l.log(path)
     l.log("checking path integrity")
     extension: str = ".tex"
