@@ -19,13 +19,13 @@ if __name__ == '__main__':
     import argument_handler as argh
     from typing import List
 
-    # l.disable()
+    l.disable()
 
     keyword = argh.get_keyword()
     l.log("started parsing directories")
     file_paths: List[str] = walk.walk()
     l.log("will start scanning files now.")
-    all_rules = rule_builder.build_rules()
+    all_rules = rule_builder.get_rules()
 
     for file_path in file_paths:
         print("at file: " + file_path)
@@ -33,3 +33,7 @@ if __name__ == '__main__':
         for line in lines:
             if will_i_process_line(line):
                 line_checker.check_line(line, all_rules)
+        print("done with: "+file_path)
+        key = input("Continue?")
+        if key == "q":
+            exit()

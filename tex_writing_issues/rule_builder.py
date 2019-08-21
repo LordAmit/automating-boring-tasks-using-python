@@ -3,47 +3,35 @@ import os
 from typing import List
 
 
-def build_rules() -> List:
-    return [_build_ambiguity(),
-            _build_complicated(),
-            _build_offensive(),
-            _build_strong()]
+def get_rules() -> List:
+    all_rules = _build_rules(["ambiguous", "complicated", "offensive", "strong"])
+    l.log("rules found are: " + str(all_rules))
+    return all_rules
 
 
-def _build_ambiguity() -> List:
-    file_name: str = "words_ambiguous"
-    return _build_rule(file_name)
+def _build_rules(rule_names: List) -> List:
+    all_rules: List = []
+    for rule_name in rule_names:
+        l.log("working with rule: " + rule_name)
+        f_rule = "words_" + rule_name
+        l.log("rule file name: " + f_rule)
+        current_rules: List = []
+        if not os.path.exists(f_rule):
+            l.log("file_rule {} NOT FOUND. EXITING".format(f_rule))
+            exit()
 
-
-def _build_complicated() -> List:
-    file_name: str = "words_complicated"
-    return _build_rule(file_name)
-
-
-def _build_offensive() -> List:
-    file_name: str = "words_offensive"
-    return _build_rule(file_name)
-
-
-def _build_strong() -> List:
-    file_name: str = "words_strong"
-    return _build_rule(file_name)
-
-
-def _build_rule(rule_file_path: str) -> List:
-    current_rules: List = []
-    f_rule: str = rule_file_path
-    if os.path.exists(f_rule):
         l.log("path to rule: " + f_rule)
         rules: List[str] = open(f_rule).readlines()
         for rule in rules:
             rule_key = rule.split(',')[:1][0].strip().lower()
             rule_value = _clean_rule(rule.split(',')[1:])
-            # double parenthesis, since we are adding a tuple in append function
+            # double parenthesis, because we are adding a tuple in append function
             current_rules.append(
                 (rule_key, rule_value)
             )
-    return current_rules
+        # again, double parenthesis, because we are adding a tuple in append function
+        all_rules.append((rule_name, current_rules))
+    return all_rules
 
 
 def _clean_rule(rules: List[str]) -> List[str]:
