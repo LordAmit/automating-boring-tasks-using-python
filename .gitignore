@@ -87,6 +87,8 @@ celerybeat-schedule
 venv/
 ENV/
 
+*.jpg
+
 # Spyder project settings
 .spyderproject
 .spyproject
@@ -102,3 +104,6 @@ ENV/
 
 *.vscode
 *__pycache__
+
+# pycharm
+*.idea*

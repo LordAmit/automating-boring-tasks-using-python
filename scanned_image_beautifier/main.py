@@ -6,7 +6,9 @@ from PIL import Image
 from PIL import ImageQt
 from PIL import ImageEnhance
 from typing import List, Union
-
+# class PyQt4.QtGui.QGraphicsScene
+from PyQt4.QtGui import QGraphicsScene
+from PyQt4.QtGui import QPixmap
 import sys
 import gui_window
 

@@ -25,7 +25,7 @@ def walk() -> List:
     for folderName, subfolders, filenames in os.walk(path):
         for filename in filenames:
             if extension:
-                l.log("checking fot extension: "+extension)
+                l.log("checking for extension: "+extension)
                 l.log("with filename: "+filename)
                 if filename.endswith(extension):
                     l.log("extension matched")

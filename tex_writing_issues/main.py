@@ -28,12 +28,12 @@ if __name__ == '__main__':
     all_rules = rule_builder.get_rules()
 
     for file_path in file_paths:
+        count_issues: int = 0
         print("at file: " + file_path)
         lines: List[str] = open(file_path).readlines()
         for line in lines:
             if will_i_process_line(line):
-                line_checker.check_line(line, all_rules)
-        print("done with: "+file_path)
-        key = input("Continue?")
-        if key == "q":
-            exit()
+                line_issues = line_checker.check_line(line, all_rules)
+                count_issues += line_issues
+        print("done with: " + file_path)
+        print("total issues found: " + str(count_issues))

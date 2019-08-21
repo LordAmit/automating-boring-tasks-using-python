@@ -2,7 +2,7 @@ import unittest
 import library.file_handler as file_handler
 
 file_address = "/home/username/file.bmp"
-file_address_with_modified = "/home/username/modified_file.bmp"
+file_address_with_modified = "/home/username/file_modified.bmp"
 filename = "file"
 ext = ".bmp"
 fake_ext = ".txt"

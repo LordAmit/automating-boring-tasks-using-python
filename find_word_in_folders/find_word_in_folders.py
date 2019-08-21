@@ -4,6 +4,7 @@ if __name__ == '__main__':
     import folder_walk as walk
     import argument_handler as argh
     from typing import List
+    l.disable()
 
     keyword = argh.get_keyword()
     l.log("started parsing directories")

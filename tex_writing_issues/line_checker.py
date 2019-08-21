@@ -8,6 +8,7 @@ def _print_red(value: str):
 
 
 def check_line(line: str, rules_packs: List):
+    count_issues: int = 0
     line = line.lower().strip()
     for rule_pack in rules_packs:
         rule_name = rule_pack[0]
@@ -22,5 +23,6 @@ def check_line(line: str, rules_packs: List):
                 issue found: {}
                 line: {}
                 issue: {}
-                replace with: {}
-                """.format(rule_name, line, keyword, rule[1:]))
+                replace with: {}""".format(rule_name, line, keyword, rule[1:]))
+                count_issues+=1
+    return count_issues

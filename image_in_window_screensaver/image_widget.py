@@ -28,7 +28,6 @@ class ImageWidget(QWidget):
         self._layout.addWidget(self._image_label)
         self.setLayout(self._layout)
 
-
     def image_shuffle(self):
         l.log("shuffle")
         self._seed = time.time()
@@ -60,7 +59,9 @@ class ImageWidget(QWidget):
         image_pix_map = QPixmap(self._all_images[index])
 
         # image_pix_map = image_pix_map.scaled(900, 900, Qt.KeepAspectRatio)
-        image_pix_map = image_pix_map.scaled(self.width(), self.height() - 20, Qt.KeepAspectRatio)
+        print(self.width(), self.height())
+
+        image_pix_map = image_pix_map.scaled(self.width(), self.height(), Qt.KeepAspectRatio)
         self._image_label.setPixmap(image_pix_map)
         if self._line_edit:
             self._line_edit.setText(self._all_images[index])
@@ -74,5 +75,5 @@ class ImageWidget(QWidget):
         elif event.button() == Qt.MouseButton.RightButton:
             self.image_previous()
 
-    def get_current_image_path_str(self)->str:
+    def get_current_image_path_str(self) -> str:
         return self._all_images[self._current_index]
