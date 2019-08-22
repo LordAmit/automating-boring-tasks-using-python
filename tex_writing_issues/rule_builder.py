@@ -1,7 +1,7 @@
 import custom_log as l
 import os
 from typing import List
-
+from pathlib import Path
 
 def get_rules() -> List:
     all_rules = _build_rules(["ambiguous", "complicated", "offensive", "strong"])
@@ -10,7 +10,8 @@ def get_rules() -> List:
 
 
 def _build_rules(rule_names: List) -> List:
-    path_rules = "/home/amit/git/automating-boring-tasks-using-python/tex_writing_issues/"
+    HOME = str(Path.home())
+    path_rules = HOME+"/git/automating-boring-tasks-using-python/tex_writing_issues/"
     all_rules: List = []
     for rule_name in rule_names:
         l.log("working with rule: " + rule_name)
@@ -18,7 +19,7 @@ def _build_rules(rule_names: List) -> List:
         l.log("rule file name: " + f_rule)
         current_rules: List = []
         if not os.path.exists(f_rule):
-            l.log("file_rule {} NOT FOUND. EXITING".format(f_rule))
+            print("file_rule {} NOT FOUND. EXITING".format(f_rule))
             exit()
 
         l.log("path to rule: " + f_rule)
