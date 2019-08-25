@@ -18,7 +18,8 @@ def check_line(line: str, rules_packs: List):
             keyword = rule[0]
             l.log("keyword: " + keyword)
             regex = re.compile(r"\b{}\b".format(keyword))
-            if len(regex.findall(line)) != 0:
+            regex_period = re.compile(r"\b{}.\b".format(keyword))
+            if len(regex.findall(line)) != 0 or len(regex_period.findall(line)):
                 print("""
                 issue: {}, issue type: {},  
                 line: {}
