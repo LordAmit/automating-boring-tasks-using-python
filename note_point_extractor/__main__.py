@@ -1,16 +1,17 @@
 #!/usr/bin/python3
 
-from PyQt4 import QtGui
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
+# from PyQt4 import QtGui
+# from PyQt4.QtCore import *
+# from PyQt4.QtGui import *
 
 import sys
+from PySide2.QtWidgets import QMainWindow, QApplication
 
 from gui import gui
 from library import text_handler
 
 
-class NoteExtractor(QtGui.QMainWindow, gui.Ui_MainWindow):
+class NoteExtractor(QMainWindow, gui.Ui_MainWindow):
     def __init__(self, parent=None):
         super(NoteExtractor, self).__init__(parent)
         self.setupUi(self)
@@ -34,10 +35,10 @@ class NoteExtractor(QtGui.QMainWindow, gui.Ui_MainWindow):
 
 
 def main():
-    app = QtGui.QApplication(sys.argv)
+    app = QApplication(sys.argv)
     form = NoteExtractor()
     form.show()
-    app.exec()
+    sys.exit(app.exec_())
 
 
 if __name__ == '__main__':
