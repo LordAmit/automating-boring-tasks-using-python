@@ -12,10 +12,12 @@ class TopLevelWidget(QWidget):
     def __init__(self):
         QWidget.__init__(self)
         # set widget layout - vertical
-        self._layout = QVBoxLayout()
+        # self._layout = QVBoxLayout()
 
         # create top horizontal bar of buttons
-        self._top = QHBoxLayout()
+        self._top:QHBoxLayout = QHBoxLayout()
+        self.setFixedHeight(50)
+
 
         self._button_previous = QPushButton("Previous")
         self._button_next = QPushButton("Next")
@@ -32,8 +34,8 @@ class TopLevelWidget(QWidget):
         self._top.addWidget(self._button_browse)
         self._top.addWidget(self._button_delete)
 
-        self._layout.addLayout(self._top)
-        self.setLayout(self._layout)
+        # self._layout.addLayout(self._top)
+        self.setLayout(self._top)
         self._image_widget_connector: ImageWidget = None
 
         self._button_shuffle.clicked.connect(self._shuffle_event)
