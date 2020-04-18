@@ -1,14 +1,12 @@
 #!/usr/bin/python3
-from PyQt4 import QtGui
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
+import os
+
+
 from PIL import Image
-from PIL import ImageQt
-from PIL import ImageEnhance
-from typing import List, Union
-# class PyQt4.QtGui.QGraphicsScene
-from PyQt4.QtGui import QGraphicsScene
-from PyQt4.QtGui import QPixmap
+
+from PyQt5.QtWidgets import (
+    QGraphicsScene, QMainWindow, QFileDialog, QApplication)
+from PyQt5.QtGui import QPixmap
 import sys
 import gui_window
 
@@ -17,7 +15,7 @@ from library import image_handler
 from library import file_handler
 
 
-class Image_Note(QtGui.QMainWindow, gui_window.Ui_MainWindow):
+class Image_Note(QMainWindow, gui_window.Ui_MainWindow):
     def __init__(self, parent=None):
         super(Image_Note, self).__init__(parent)
         self.setupUi(self)
@@ -86,7 +84,7 @@ class Image_Note(QtGui.QMainWindow, gui_window.Ui_MainWindow):
     #                                           ".pdf"))
 
     def browse_pdf_file(self):
-        self.pdf_file_address = QtGui.QFileDialog.getOpenFileName(
+        self.pdf_file_address = QFileDialog.getOpenFileName(
             self, 'Open PDF File')
         self.file_address = file_handler.change_path_extension(
             self.pdf_file_address, ".png")
@@ -95,8 +93,12 @@ class Image_Note(QtGui.QMainWindow, gui_window.Ui_MainWindow):
         self.process_file()
 
     def browse_file(self):
-        self.file_address = QtGui.QFileDialog.getOpenFileName(
-            self, 'Open Image File')
+
+        response = QFileDialog.getOpenFileName(self, 'Open Image File')
+        self.file_address = response[0]
+        if not os.path.exists(self.file_address):
+            return
+        # return
         self.process_file()
 
     def process_file(self):
@@ -117,7 +119,7 @@ class Image_Note(QtGui.QMainWindow, gui_window.Ui_MainWindow):
 
 
 def main():
-    app = QtGui.QApplication(sys.argv)
+    app = QApplication(sys.argv)
     form = Image_Note()
     form.show()
     app.exec()
