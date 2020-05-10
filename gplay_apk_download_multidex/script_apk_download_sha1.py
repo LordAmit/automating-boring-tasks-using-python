@@ -105,7 +105,7 @@ def update_log(index_apk: int,
                                       multidex,
                                       sha1)
     contents[index_apk] = line.strip()+"\n"
-    print("line")
+    print(line)
     with open(log_path, "w") as log_file:
         log_file.writelines(contents)
         log_file.close()
