@@ -165,13 +165,15 @@ def download():
             # and check_if_chosen_exists(apk_path):
             print("{} is already processed. skipping.".format(apk_name))
             continue
-        delay = random.randint(RANDOM_DELAY[0], RANDOM_DELAY[1])
-        print("delaying for: {} seconds".format(delay))
-        time.sleep(delay)
-        exec_command = COMMAND.format(GPLAYCLI, apk_name, GPLAYCLI_CONF)
-        exec_command = shlex.split(exec_command)
-        if not check_if_chosen_exists(apk_path):
-            print(apk_path + " already exists. skipping download.")
+        if check_if_chosen_exists(apk_path):
+            print(apk_path + " already exists, skipping download.")   
+        else:
+            delay = random.randint(RANDOM_DELAY[0], RANDOM_DELAY[1])
+            print(apk_path + " does not exist. Attempting download.")
+            print("delaying for: {} seconds".format(delay))
+            time.sleep(delay)
+            exec_command = COMMAND.format(GPLAYCLI, apk_name, GPLAYCLI_CONF)
+            exec_command = shlex.split(exec_command)
             print(exec_command)
             # subprocess.check_output(exec_command)
         processed = True
@@ -188,5 +190,4 @@ def download():
 
 
 if __name__ == "__main__":
-
     download()
