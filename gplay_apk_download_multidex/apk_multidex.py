@@ -39,4 +39,3 @@ def count_multidex_in_dir(dir_path: str):
 
 if __name__ == "__main__":
     print(count_multidex_in_dir("/Users/amitseal/workspaces/apks"))
-
