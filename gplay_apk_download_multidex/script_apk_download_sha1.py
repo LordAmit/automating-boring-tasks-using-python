@@ -1,6 +1,7 @@
 import time
 import random
 import subprocess
+from datetime import datetime
 import shlex
 from typing import List
 import os
@@ -17,7 +18,7 @@ GPLAYCLI = WORK_PATH+"venv/bin/gplaycli"
 GPLAYCLI_CONF = WORK_PATH+"gplaycli.conf"
 APK_LIST = WORK_PATH+"apk_list_fake.txt"
 INDEX_OUTPUT = WORK_PATH+"index_checked"
-LOG_FILE = WORK_PATH+"LOG.txt"
+LOG_FILE = WORK_PATH+"LOG"+datetime.now().strftime('_%H_%M_%d_%m_%Y')+".txt"
 
 OUTPUT_CSV_HEADER = "Index,ID,Processed,Downloaded,Multidex,SHA1"
 
