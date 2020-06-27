@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+# 
+# Adds new line in between sentences separated by periods. Respects existing line breaks, tries to respect indentation.
+
+
 from typing import List
 import os
 import shutil
