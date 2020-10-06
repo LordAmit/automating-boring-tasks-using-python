@@ -5,14 +5,17 @@ import os
 import argument_handler as argh
 
 
-def walk() -> List:
+def walk(mode=None) -> List:
     """
     walks through a path to return list of absolute path of images with png or jpg extensions
+    :param mode: can be
     :param path: to the directory where images will be searched for
     :return: List of string path of images
     """
     image_paths = []
     path: str = argh.get_path()
+    if mode:
+        path += mode
     l.log(path)
     ignore: str = argh.get_ignore_word()
     l.log("checking path integrity")
