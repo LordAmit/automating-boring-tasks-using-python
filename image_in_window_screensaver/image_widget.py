@@ -156,6 +156,9 @@ class ImageWidget(QWidget):
         elif event.key() == Qt.Key_2 or event.key() == Qt.Key_P:
             l.log("Key 2 / P --> Portrait mode")
             self.initialize_images("portrait/")
+        elif event.key() == Qt.Key_3 or event.key() == Qt.Key_R:
+            l.log("Key 3 / Resetall")
+            self.initialize_images()
         self.setFocus()
         self.set_title(self.get_current_image_path_str())
 
