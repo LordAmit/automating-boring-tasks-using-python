@@ -82,7 +82,7 @@ class MainWindow(QMainWindow):
 
 
 if __name__ == '__main__':
-    # l.disable()
+    l.disable()
     import sys
 
     app = QApplication(sys.argv)
