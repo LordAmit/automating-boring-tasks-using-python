@@ -128,7 +128,6 @@ class ImageWidget(QWidget):
         l.log("Key event at top_level_widget: " + str(event.key()))
         if event.key() == Qt.Key_S:
             l.log("Key S")
-
             self.image_shuffle()
         elif event.key() == Qt.Key_Left or event.key() == Qt.Key_Backspace or event.key() == Qt.Key_P:
             l.log("Key left or backspace")
@@ -159,6 +158,7 @@ class ImageWidget(QWidget):
         elif event.key() == Qt.Key_3 or event.key() == Qt.Key_R:
             l.log("Key 3 / Resetall")
             self.initialize_images()
+        
         self.setFocus()
         self.set_title(self.get_current_image_path_str())
 

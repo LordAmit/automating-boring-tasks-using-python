@@ -11,7 +11,7 @@ from PySide2.QtCore import Qt
 from image_widget import ImageWidget
 
 
-class MainWindow(QMainWindow):
+# class MainWindow(QMainWindow):
 
     # def __init__(self, widget):
     #     QMainWindow.__init__(self)
@@ -34,10 +34,10 @@ class MainWindow(QMainWindow):
     #     bpg._window_height = event.size().height()
     #     bpg._window_width = event.size().width()
 
-    def set_title(self, image_path):
-        new_title = self.default_title + image_path
-        l.log("setting title: "+new_title)
-        self.setWindowTitle(new_title)
+    # def set_title(self, image_path):
+    #     new_title = self.default_title + image_path
+    #     l.log("setting title: "+new_title)
+    #     self.setWindowTitle(new_title)
 
     # def keyReleaseEvent(self, event: QKeyEvent):
     #     l.log("Key event at top_level_widget: " + str(event.key()))
@@ -79,7 +79,6 @@ class MainWindow(QMainWindow):
     #     else:
     #         window.resize(1920,1080)
     #         self._is_full_screen = True
-
 
 if __name__ == '__main__':
     l.disable()
