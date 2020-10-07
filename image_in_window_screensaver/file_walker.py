@@ -1,10 +1,13 @@
+from logging import currentframe
 from os import path as Path
 from typing import List
 import custom_log as l
 import os
 import argument_handler as argh
 
-
+current_mode = None
+def get_mode():
+    return current_mode
 def walk(mode=None) -> List:
     """
     walks through a path to return list of absolute path of images with png or jpg extensions
@@ -16,6 +19,8 @@ def walk(mode=None) -> List:
     path: str = argh.get_path()
     if mode:
         path += mode
+        global current_mode 
+        current_mode = mode
     l.log(path)
     ignore: str = argh.get_ignore_word()
     l.log("checking path integrity")
@@ -47,11 +52,11 @@ def is_exclude_image(image_path: str, ignore_word: str) -> str:
         list_ignores = ignore_word.split(',')
 
         for word in list_ignores:
-            if image_path.lower().find(word) is not -1:
+            if image_path.lower().find(word) != -1:
                 l.log(["found entry in list_ignore: ", image_path, word])
                 return True
     else:
-        if image_path.lower().find(ignore_word) is not -1:
+        if image_path.lower().find(ignore_word) != -1:
             l.log(["found entry in list_ignore: ", image_path, ignore_word])
             return True
     return False
