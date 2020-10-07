@@ -73,7 +73,7 @@ class ImageWidget(QWidget):
         l.log("delete: " + self._all_images[self._current_index])
         send2trash(self._all_images[self._current_index])
         # self._all_images: List = file_walker.walk(sys.argv[1])
-        self._all_images: List = file_walker.walk()
+        self._all_images: List = file_walker.walk(file_walker.get_mode())
         self._set_image(self._current_index)
         # self.image_shuffle()
 
@@ -156,7 +156,7 @@ class ImageWidget(QWidget):
             l.log("Key 2 / P --> Portrait mode")
             self.initialize_images("portrait/")
         elif event.key() == Qt.Key_3 or event.key() == Qt.Key_R:
-            l.log("Key 3 / Resetall")
+            l.log("Key 3 / Reset all")
             self.initialize_images()
         
         self.setFocus()
