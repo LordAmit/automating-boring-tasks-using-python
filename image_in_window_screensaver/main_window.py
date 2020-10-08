@@ -11,7 +11,7 @@ from PySide2.QtCore import Qt
 from image_widget import ImageWidget
 
 if __name__ == '__main__':
-    l.disable()
+    # l.disable()
     import sys
 
     app = QApplication(sys.argv)
