@@ -90,20 +90,19 @@ class ImageWidget(QWidget):
     def image_delete(self):
         l.log("delete: " + self._all_images[self._current_index])
         send2trash(self._all_images[self._current_index])
-        # self._all_images: List = file_walker.walk(sys.argv[1])
-        self._all_images: List = file_walker.walk(file_walker.get_mode())
+        self._all_images.remove(self._all_images[self._current_index])
         self._set_image(self._current_index)
-        # self.image_shuffle()
 
     def _set_image(self, index):
-        if index > len(self._all_images)-1:
+        if index > len(self._all_images)-1 or index < -1*len(self._all_images):
             l.log("error: shuffling again")
             index = 0
+        self._current_index = index
         l.log("setting image")
-        image_pix_map = QPixmap(self._all_images[index])
+        image_pix_map = QPixmap(self._all_images[self._current_index])
         print("image: ", image_pix_map.width(), image_pix_map.height())
         self._image_label.setPixmap(image_pix_map)
-        self.set_title(self._all_images[index])
+        self.set_title(self._all_images[self._current_index])
 
     # def set_line_edit(self, edit_line: QLineEdit):
     #     self._line_edit = edit_line
