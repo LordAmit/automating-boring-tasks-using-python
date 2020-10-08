@@ -21,13 +21,8 @@ class ImageWidget(QWidget):
         self._image_label.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Ignored)
         self._image_label.setScaledContents(True)
         self.is_full_screen: bool = False
-        # self._size_method = None
         self._seed = time.time()
-        # self._line_edit: QLineEdit = None
-        # self.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
-
-        # self.setSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.Minimum)
-        # self.sizeHint()
+       
         random.seed(self._seed)
 
         # self._all_images: List = file_walker.walk(sys.argv[1])
@@ -37,12 +32,15 @@ class ImageWidget(QWidget):
         self.setLayout(self._layout)
         self.initialize_images()
 
-    def initialize_images(self, mode=None):
+    def initialize_images(self, mode=None, current_image_path = None):
         self._all_images: List = file_walker.walk(mode)
         self._current_index = 0
-        self.image_shuffle()
+        if current_image_path:
+            self._current_index = self.get_index_from_image_path(current_image_path)
+        # self.image_shuffle()
+        self._set_image(self._current_index)
 
-
+    
 
     def is_image_landscape(self, image: QPixmap):
         if image.width()/image.height() > 1:
@@ -50,14 +48,28 @@ class ImageWidget(QWidget):
         else:
             return False
 
+    def get_index_from_image_path(self, image_path: str):
+        for i in range(0, len(self._all_images)):
+            if self._all_images[i] is image_path:
+                return i
+    
     def image_shuffle(self):
         l.log("shuffle")
+        image_path = self._all_images[self._current_index]
         self._seed = time.time()
         random.seed(self._seed)
         random.shuffle(self._all_images)
-        self._current_index = 0
+        self._current_index = self.get_index_from_image_path(image_path)
         self._set_image(self._current_index)
+       
+        # self._current_index = 0
+        # self._set_image(self._current_index)
 
+    def revert_shuffle(self):
+        l.log("revert shuffle")
+        current_image_path = self._all_images[self._current_index]
+        self.initialize_images(file_walker.get_mode(), current_image_path)
+        
     def image_next(self):
         l.log("next")
         self._current_index += 1
@@ -82,23 +94,10 @@ class ImageWidget(QWidget):
             l.log("error: shuffling again")
             self.image_shuffle()
         l.log("setting image")
-
         image_pix_map = QPixmap(self._all_images[index])
-
-
-        # if self.is_image_landscape(image_pix_map):
-        #     self._image_label.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Ignored)
-        # else:
-        #     self._image_label.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Fixed)
         print("image: ", image_pix_map.width(), image_pix_map.height())
-
-        # image_pix_map = image_pix_map.scaled(900, 900, Qt.KeepAspectRatio)
-        # print(self.width(), self.height())
-
-        #
         self._image_label.setPixmap(image_pix_map)
-        # if self._line_edit:
-        #     self._line_edit.setText(self._all_images[index])
+        self.set_title(self._all_images[index])
 
     # def set_line_edit(self, edit_line: QLineEdit):
     #     self._line_edit = edit_line
@@ -160,7 +159,7 @@ class ImageWidget(QWidget):
             self.initialize_images()
         
         self.setFocus()
-        self.set_title(self.get_current_image_path_str())
+        # self.set_title(self.get_current_image_path_str())
 
     def get_current_image_path_str(self) -> str:
         return self._all_images[self._current_index]
