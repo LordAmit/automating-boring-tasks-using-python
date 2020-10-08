@@ -49,10 +49,11 @@ class ImageWidget(QWidget):
             return False
 
     def get_index_from_image_path(self, image_path: str):
-        for i in range(0, len(self._all_images)):
-            if self._all_images[i] is image_path:
-                return i
-    
+        # for i in range(0, len(self._all_images)):
+        #     if self._all_images[i] is image_path:
+        #         return i
+        return self._all_images.index(image_path)
+
     def image_shuffle(self):
         l.log("shuffle")
         image_path = self._all_images[self._current_index]
@@ -67,18 +68,23 @@ class ImageWidget(QWidget):
 
     def revert_shuffle(self):
         l.log("revert shuffle")
+        print(self._current_index)
         current_image_path = self._all_images[self._current_index]
         self.initialize_images(file_walker.get_mode(), current_image_path)
         
     def image_next(self):
         l.log("next")
         self._current_index += 1
+        if self._current_index > len(self._all_images):
+            self._current_index = 0
         self._set_image(self._current_index)
         # self.setFocus()
 
     def image_previous(self):
         l.log("previous")
         self._current_index -= 1
+        if self._current_index <= -1*len(self._all_images):
+            self._current_index = 0
         self._set_image(self._current_index)
 
     def image_delete(self):
@@ -92,7 +98,7 @@ class ImageWidget(QWidget):
     def _set_image(self, index):
         if index > len(self._all_images)-1:
             l.log("error: shuffling again")
-            self.image_shuffle()
+            index = 0
         l.log("setting image")
         image_pix_map = QPixmap(self._all_images[index])
         print("image: ", image_pix_map.width(), image_pix_map.height())
@@ -124,20 +130,21 @@ class ImageWidget(QWidget):
 
 
     def keyReleaseEvent(self, event: QKeyEvent):
-        l.log("Key event at top_level_widget: " + str(event.key()))
-        if event.key() == Qt.Key_S:
+        key = event.key()
+        l.log("Key event at top_level_widget: " + str(key))
+        if key == Qt.Key_S:
             l.log("Key S")
             self.image_shuffle()
-        elif event.key() == Qt.Key_Left or event.key() == Qt.Key_Backspace or event.key() == Qt.Key_P:
+        elif key == Qt.Key_Left or key == Qt.Key_Backspace or key == Qt.Key_P:
             l.log("Key left or backspace")
             self.image_previous()
-        elif event.key() == Qt.Key_Right or event.key() == Qt.Key_N or event.key() == Qt.Key_Space:
+        elif key == Qt.Key_Right or key == Qt.Key_N or key == Qt.Key_Space:
             l.log("Key Right / N / Space")
             self.image_next()
-        elif event.key() == Qt.Key_Delete:
+        elif key == Qt.Key_Delete:
             l.log("Key Delete")
             self.image_delete()
-        elif event.key() == Qt.Key_F:
+        elif key == Qt.Key_F:
             l.log("Key F")
             if self.is_full_screen:
                 self.showNormal()
@@ -145,16 +152,18 @@ class ImageWidget(QWidget):
                 self.showFullScreen()
             # toggle
             self.is_full_screen = not self.is_full_screen
-        elif event.key() == Qt.Key_B:
+        elif key == Qt.Key_B:
             l.log("Key B")
             self._browse_event()
-        elif event.key() == Qt.Key_1 or event.key() == Qt.Key_L:
+        elif key == Qt.Key_1 or key == Qt.Key_L:
             l.log("Key 1 / L --> landscape mode")
             self.initialize_images("landscape/")
-        elif event.key() == Qt.Key_2 or event.key() == Qt.Key_P:
+        elif key == Qt.Key_2 or key == Qt.Key_P:
             l.log("Key 2 / P --> Portrait mode")
             self.initialize_images("portrait/")
-        elif event.key() == Qt.Key_3 or event.key() == Qt.Key_R:
+        elif key == Qt.Key_R:
+            self.revert_shuffle()
+        elif key == Qt.Key_3:
             l.log("Key 3 / Reset all")
             self.initialize_images()
         
