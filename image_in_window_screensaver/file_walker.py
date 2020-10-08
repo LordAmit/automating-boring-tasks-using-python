@@ -29,6 +29,7 @@ def walk(mode=None) -> List:
     else:
         l.log("path does not exist")
         exit()
+    # l.disable()
     for folderName, subfolders, filenames in os.walk(path):
         for filename in filenames:
             if (filename.endswith('jpg') or
@@ -37,10 +38,11 @@ def walk(mode=None) -> List:
                     filename.endswith('.jpeg')):
                 file_path = os.path.join(folderName, filename)
 
-                l.log([file_path, filename])
+                # l.log([file_path, filename])
                 if ignore and is_exclude_image(file_path, ignore):
                     continue
                 image_paths.append(file_path)
+    
     return image_paths
 
 
