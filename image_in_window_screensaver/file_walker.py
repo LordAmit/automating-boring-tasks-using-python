@@ -6,8 +6,10 @@ import os
 import argument_handler as argh
 
 current_mode = None
+
 def get_mode():
     return current_mode
+
 def walk(mode=None) -> List:
     """
     walks through a path to return list of absolute path of images with png or jpg extensions
