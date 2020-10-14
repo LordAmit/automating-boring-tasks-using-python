@@ -107,3 +107,5 @@ ENV/
 
 # pycharm
 *.idea*
+
+*.tex
