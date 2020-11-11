@@ -2,7 +2,7 @@ import os
 
 from PySide2.QtWidgets import QWidget, QLabel, QHBoxLayout, QLineEdit, QSizePolicy, QVBoxLayout
 from PySide2.QtGui import QPixmap, QMouseEvent, QKeyEvent, QDesktopServices
-from PySide2.QtCore import Qt, QSize, Slot, QUrl
+from PySide2.QtCore import Qt, QSize, Slot, QUrl, QTimer
 import time
 import random
 import file_walker
@@ -21,8 +21,10 @@ class ImageWidget(QWidget):
         self._image_label.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Ignored)
         self._image_label.setScaledContents(True)
         self.is_full_screen: bool = False
+        self.is_playing: bool = False
         self._seed = time.time()
-       
+        self.timer = QTimer()
+
         random.seed(self._seed)
 
         # self._all_images: List = file_walker.walk(sys.argv[1])
@@ -32,7 +34,7 @@ class ImageWidget(QWidget):
         self.setLayout(self._layout)
         self.initialize_images()
 
-    def initialize_images(self, mode=None, current_image_path = None):
+    def initialize_images(self, mode=None, current_image_path=None):
         self._all_images: List = file_walker.walk(mode)
         self._current_index = 0
         if current_image_path:
@@ -40,10 +42,8 @@ class ImageWidget(QWidget):
         # self.image_shuffle()
         self._set_image(self._current_index)
 
-    
-
     def is_image_landscape(self, image: QPixmap):
-        if image.width()/image.height() > 1:
+        if image.width() / image.height() > 1:
             return True
         else:
             return False
@@ -62,7 +62,7 @@ class ImageWidget(QWidget):
         random.shuffle(self._all_images)
         self._current_index = self.get_index_from_image_path(image_path)
         self._set_image(self._current_index)
-       
+
         # self._current_index = 0
         # self._set_image(self._current_index)
 
@@ -71,7 +71,7 @@ class ImageWidget(QWidget):
         print(self._current_index)
         current_image_path = self._all_images[self._current_index]
         self.initialize_images(file_walker.get_mode(), current_image_path)
-        
+
     def image_next(self):
         l.log("next")
         self._current_index += 1
@@ -83,7 +83,7 @@ class ImageWidget(QWidget):
     def image_previous(self):
         l.log("previous")
         self._current_index -= 1
-        if self._current_index <= -1*len(self._all_images):
+        if self._current_index <= -1 * len(self._all_images):
             self._current_index = 0
         self._set_image(self._current_index)
 
@@ -94,7 +94,7 @@ class ImageWidget(QWidget):
         self._set_image(self._current_index)
 
     def _set_image(self, index):
-        if index > len(self._all_images)-1 or index < -1*len(self._all_images):
+        if index > len(self._all_images) - 1 or index < -1 * len(self._all_images):
             l.log("error: shuffling again")
             index = 0
         self._current_index = index
@@ -124,9 +124,8 @@ class ImageWidget(QWidget):
 
     def set_title(self, image_path):
         new_title = self.default_title + image_path
-        l.log("setting title: "+new_title)
+        l.log("setting title: " + new_title)
         self.setWindowTitle(new_title)
-
 
     def keyReleaseEvent(self, event: QKeyEvent):
         key = event.key()
@@ -134,7 +133,7 @@ class ImageWidget(QWidget):
         if key == Qt.Key_S:
             l.log("Key S")
             self.image_shuffle()
-        elif key == Qt.Key_Left or key == Qt.Key_Backspace or key == Qt.Key_P:
+        elif key == Qt.Key_Left or key == Qt.Key_Backspace:
             l.log("Key left or backspace")
             self.image_previous()
         elif key == Qt.Key_Right or key == Qt.Key_N or key == Qt.Key_Space:
@@ -154,20 +153,43 @@ class ImageWidget(QWidget):
         elif key == Qt.Key_B:
             l.log("Key B")
             self._browse_event()
-        elif key == Qt.Key_1 or key == Qt.Key_L:
-            l.log("Key 1 / L --> landscape mode")
+        elif key == Qt.Key_1:
+            l.log("Key 1 --> landscape mode")
             self.initialize_images("landscape/")
-        elif key == Qt.Key_2 or key == Qt.Key_P:
-            l.log("Key 2 / P --> Portrait mode")
+        elif key == Qt.Key_2:
+            l.log("Key 2 --> Portrait mode")
             self.initialize_images("portrait/")
         elif key == Qt.Key_R:
             self.revert_shuffle()
         elif key == Qt.Key_3:
             l.log("Key 3 / Reset all")
             self.initialize_images()
-        
+        elif key == Qt.Key_P:
+            l.log("Key P / Play / Pause")
+            self.toggle_play()
+
         self.setFocus()
         # self.set_title(self.get_current_image_path_str())
+
+    def toggle_play(self):
+        l.log("toggle play: " + str(self.is_playing))
+        self.is_playing = not self.is_playing
+        self.play()
+
+    def play(self):
+
+        self.timer.setInterval(bpg.pause_secs * 1000)
+        self.timer.timeout.connect(self.play_image_next)
+        if self.is_playing:
+            self.timer.start()
+
+    def play_image_next(self):
+        if self.is_playing:
+            l.log("play_image_next play: " + str(self.is_playing))
+            self.image_next()
+        else:
+            l.log("stop play: " + str(self.is_playing))
+            self.timer.stop()
 
     def get_current_image_path_str(self) -> str:
         return self._all_images[self._current_index]
