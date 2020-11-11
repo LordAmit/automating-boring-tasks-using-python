@@ -1,15 +1,16 @@
 import os
-
-from PySide2.QtWidgets import QWidget, QLabel, QHBoxLayout, QLineEdit, QSizePolicy, QVBoxLayout
-from PySide2.QtGui import QPixmap, QMouseEvent, QKeyEvent, QDesktopServices
-from PySide2.QtCore import Qt, QSize, Slot, QUrl, QTimer
-import time
 import random
-import file_walker
+import time
 from typing import List
+
+from PySide2.QtCore import Qt, Slot, QUrl, QTimer
+from PySide2.QtGui import QPixmap, QMouseEvent, QKeyEvent, QDesktopServices
+from PySide2.QtWidgets import QWidget, QLabel, QSizePolicy, QVBoxLayout
 from send2trash import send2trash
-import custom_log as l
+
 import bad_practise_global as bpg
+import custom_log as l
+import file_walker
 
 
 class ImageWidget(QWidget):
@@ -167,7 +168,7 @@ class ImageWidget(QWidget):
         elif key == Qt.Key_P:
             l.log("Key P / Play / Pause")
             self.toggle_play()
-
+        self.pause()
         self.setFocus()
         # self.set_title(self.get_current_image_path_str())
 
@@ -177,11 +178,16 @@ class ImageWidget(QWidget):
         self.play()
 
     def play(self):
-
+        l.log("setting up play timer")
         self.timer.setInterval(bpg.pause_secs * 1000)
         self.timer.timeout.connect(self.play_image_next)
         if self.is_playing:
             self.timer.start()
+
+    def pause(self):
+        if not self.is_playing:
+            l.log("pausing auto play: " + str(self.is_playing))
+            self.timer.stop()
 
     def play_image_next(self):
         if self.is_playing:
