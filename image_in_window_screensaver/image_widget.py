@@ -22,7 +22,12 @@ class ImageWidget(QWidget):
         self._image_label.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Ignored)
         self._image_label.setScaledContents(True)
 
+        # images_list
+        self._all_images: List = []
+
         # properties
+        self._shuffle_start_index = 0
+        self._current_index = 0
         self.is_full_screen: bool = False
         self.is_playing: bool = False
         self._seed = time.time()
@@ -44,8 +49,10 @@ class ImageWidget(QWidget):
     def initialize_images(self, mode=None, current_image_path=None):
         self._all_images: List = file_walker.walk(mode)
         self._current_index = 0
+        self._shuffle_start_index = 0
         if current_image_path:
             self._current_index = self.get_index_from_image_path(current_image_path)
+            self._shuffle_start_index = self._current_index
         # self.image_shuffle()
         self._set_image(self._current_index)
 
@@ -69,6 +76,7 @@ class ImageWidget(QWidget):
         random.shuffle(self._all_images)
         self._current_index = self.get_index_from_image_path(image_path)
         self._set_image(self._current_index)
+        self._shuffle_start_index = self._current_index
 
         # self._current_index = 0
         # self._set_image(self._current_index)
@@ -102,7 +110,7 @@ class ImageWidget(QWidget):
 
     def _set_image(self, index):
         if index > len(self._all_images) - 1 or index < -1 * len(self._all_images):
-            l.log("error: shuffling again")
+            l.log("error: resetting again")
             index = 0
         self._current_index = index
         l.log("setting image")
@@ -166,6 +174,14 @@ class ImageWidget(QWidget):
         elif key == Qt.Key_2:
             l.log("Key 2 --> Portrait mode")
             self.initialize_images("portrait/")
+        elif key == Qt.Key_0:
+            l.log("Key 0 --> go to index 0")
+            if self._shuffle_start_index != 0:
+                self._current_index = self._shuffle_start_index
+            else:
+                self._current_index = 0
+            self._set_image(self._current_index)
+
         elif key == Qt.Key_R:
             self.revert_shuffle()
         elif key == Qt.Key_3:
@@ -179,7 +195,7 @@ class ImageWidget(QWidget):
         # self.set_title(self.get_current_image_path_str())
 
     def toggle_play(self):
-        l.log("toggle play: " + str(self.is_playing))
+        l.log("toggle auto play is" + str(self.is_playing))
         self.is_playing = not self.is_playing
         self.play()
 
@@ -195,11 +211,13 @@ class ImageWidget(QWidget):
 
     def play_image_next(self):
         if self.is_playing:
-            l.log("play_image_next play: " + str(self.is_playing) + " " + str(self._current_index))
-
+            l.log("play_image_next - auto_play: "
+                  + str(self.is_playing)
+                  + ", current_index: "
+                  + str(self._current_index))
             self.image_next()
         else:
-            l.log("stop play: " + str(self.is_playing))
+            l.log("stopping: auto_play: " + str(self.is_playing))
             self.timer.stop()
 
     def get_current_image_path_str(self) -> str:
