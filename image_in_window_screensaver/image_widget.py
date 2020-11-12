@@ -190,6 +190,12 @@ class ImageWidget(QWidget):
         elif key == Qt.Key_P:
             l.log("Key P / Play / Pause")
             self.toggle_play()
+        elif key == Qt.Key_Equal:
+            l.log("equal pressed")
+            self.increase_timer()
+        elif str(key) == "45":
+            l.log("dash pressed")
+            self.decrease_timer()
         self.pause()
         self.setFocus()
         # self.set_title(self.get_current_image_path_str())
@@ -219,6 +225,20 @@ class ImageWidget(QWidget):
         else:
             l.log("stopping: auto_play: " + str(self.is_playing))
             self.timer.stop()
+
+    def increase_timer(self):
+        if bpg.pause_secs > 60:
+            return
+        bpg.pause_secs += 1
+        l.log("increasing pause_secs for autoplay: "+str(bpg.pause_secs))
+        self.timer.setInterval(bpg.pause_secs * 1000)
+
+    def decrease_timer(self):
+        if bpg.pause_secs < 1:
+            return
+        bpg.pause_secs -= 1
+        l.log("decreasing pause_secs for autoplay: "+str(bpg.pause_secs))
+        self.timer.setInterval(bpg.pause_secs * 1000)
 
     def get_current_image_path_str(self) -> str:
         return self._all_images[self._current_index]
