@@ -227,14 +227,14 @@ class ImageWidget(QWidget):
             self.timer.stop()
 
     def increase_timer(self):
-        if bpg.pause_secs > 60:
+        if (bpg.pause_secs) > 59:
             return
         bpg.pause_secs += 1
         l.log("increasing pause_secs for autoplay: "+str(bpg.pause_secs))
         self.timer.setInterval(bpg.pause_secs * 1000)
 
     def decrease_timer(self):
-        if bpg.pause_secs < 1:
+        if (bpg.pause_secs) < 2:
             return
         bpg.pause_secs -= 1
         l.log("decreasing pause_secs for autoplay: "+str(bpg.pause_secs))
