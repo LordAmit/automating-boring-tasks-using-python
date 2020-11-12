@@ -7,4 +7,4 @@ screen_width: int = 1440
 height_spacing = 0
 width_spacing = 0
 
-pause_secs = 7
+pause_secs = 10
