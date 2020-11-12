@@ -21,10 +21,16 @@ class ImageWidget(QWidget):
         self._image_label = QLabel(self)
         self._image_label.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Ignored)
         self._image_label.setScaledContents(True)
+
+        # properties
         self.is_full_screen: bool = False
         self.is_playing: bool = False
         self._seed = time.time()
+
+        # timer
         self.timer = QTimer()
+        self.timer.setInterval(bpg.pause_secs * 1000)
+        self.timer.timeout.connect(self.play_image_next)
 
         random.seed(self._seed)
 
@@ -178,9 +184,7 @@ class ImageWidget(QWidget):
         self.play()
 
     def play(self):
-        l.log("setting up play timer")
-        self.timer.setInterval(bpg.pause_secs * 1000)
-        self.timer.timeout.connect(self.play_image_next)
+        l.log("starting play timer")
         if self.is_playing:
             self.timer.start()
 
@@ -191,7 +195,8 @@ class ImageWidget(QWidget):
 
     def play_image_next(self):
         if self.is_playing:
-            l.log("play_image_next play: " + str(self.is_playing))
+            l.log("play_image_next play: " + str(self.is_playing) + " " + str(self._current_index))
+
             self.image_next()
         else:
             l.log("stop play: " + str(self.is_playing))
