@@ -165,9 +165,12 @@ class ImageWidget(QWidget):
                 self.showFullScreen()
             # toggle
             self.is_full_screen = not self.is_full_screen
+        elif key == Qt.Key_V:
+            l.log("Key V")
+            self._browse_event()
         elif key == Qt.Key_B:
             l.log("Key B")
-            self._browse_event()
+            self._shuffle_start_index = self._current_index
         elif key == Qt.Key_1:
             l.log("Key 1 --> landscape mode")
             self.initialize_images("landscape/")
