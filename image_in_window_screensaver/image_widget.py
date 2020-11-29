@@ -4,7 +4,7 @@ import time
 from typing import List
 
 from PySide2.QtCore import Qt, Slot, QUrl, QTimer
-from PySide2.QtGui import QPixmap, QMouseEvent, QKeyEvent, QDesktopServices
+from PySide2.QtGui import QPixmap, QMouseEvent, QKeyEvent, QDesktopServices, QKeySequence
 from PySide2.QtWidgets import QWidget, QLabel, QSizePolicy, QVBoxLayout
 from send2trash import send2trash
 
@@ -144,7 +144,7 @@ class ImageWidget(QWidget):
 
     def keyReleaseEvent(self, event: QKeyEvent):
         key = event.key()
-        l.log("Key event at top_level_widget: " + str(key))
+        l.log("Key event at top_level_widget: " + str(key) + " " + QKeySequence(key).toString())
         if key == Qt.Key_S:
             l.log("Key S")
             self.image_shuffle()
@@ -184,7 +184,6 @@ class ImageWidget(QWidget):
             else:
                 self._current_index = 0
             self._set_image(self._current_index)
-
         elif key == Qt.Key_R:
             self.revert_shuffle()
         elif key == Qt.Key_3:
@@ -193,12 +192,19 @@ class ImageWidget(QWidget):
         elif key == Qt.Key_P:
             l.log("Key P / Play / Pause")
             self.toggle_play()
+        # timer
         elif key == Qt.Key_Equal:
             l.log("equal pressed")
             self.increase_timer()
-        elif str(key) == "45":
-            l.log("dash pressed")
+        elif key == Qt.Key_Plus:
+            print("+ pressed")
+            self.increase_timer(10)
+        elif key == Qt.Key_Minus:
+            print("dash pressed")
             self.decrease_timer()
+        elif key == Qt.Key_Underscore:
+            print("- pressed")
+            self.decrease_timer(10)
         self.pause()
         self.setFocus()
         # self.set_title(self.get_current_image_path_str())
@@ -229,17 +235,17 @@ class ImageWidget(QWidget):
             l.log("stopping: auto_play: " + str(self.is_playing))
             self.timer.stop()
 
-    def increase_timer(self):
-        if (bpg.pause_secs) > 59:
+    def increase_timer(self, time = 1):
+        if (bpg.pause_secs + time) >= 59:
             return
-        bpg.pause_secs += 1
+        bpg.pause_secs += time
         l.log("increasing pause_secs for autoplay: "+str(bpg.pause_secs))
         self.timer.setInterval(bpg.pause_secs * 1000)
 
-    def decrease_timer(self):
-        if (bpg.pause_secs) < 2:
+    def decrease_timer(self, time = 1):
+        if (bpg.pause_secs - time) <= 2:
             return
-        bpg.pause_secs -= 1
+        bpg.pause_secs -= time
         l.log("decreasing pause_secs for autoplay: "+str(bpg.pause_secs))
         self.timer.setInterval(bpg.pause_secs * 1000)
 
