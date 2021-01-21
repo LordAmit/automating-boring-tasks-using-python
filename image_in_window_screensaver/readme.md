@@ -1,14 +1,14 @@
-# Image Viewer/ScreenSaver
+# No Nonsense Image Viewer/ScreenSaver
 
-This is something I created as a cross platform solution that
+No nonsense Image viewer/Screensaver is something I created that
 
-- can show images in full screen / window mode
-- will scroll through images after a regular, customizable interval
-- will follow some conventions I defined (more coming about that a bit later)
-- helped me learn a bit about PySide2
-- Allows keyboard based control
+- Can show images in full screen / window mode
+- Will scroll through images after a regular, customizable interval
+- Will follow some conventions I defined (more coming about that a bit later)
+- Help me learn a bit about PySide2
+- Allow keyboard based control
 - Allows finding the image in file browser
-- Deletion
+- Delete images
 
 etc.
 
@@ -20,7 +20,9 @@ To get started,  start the program with the directory path that contains images.
   - landscape
   - portrait
 
-```
+For example:
+
+```sh
 /Users/amitseal/git/automating-boring-tasks-using-python/image_in_window_screensaver/venv/bin/python /Users/amitseal/git/automating-boring-tasks-using-python/image_in_window_screensaver/main_window.py --path /Users/amitseal/Pictures/somerandomfolder/
 ```
 
@@ -30,21 +32,21 @@ So, that's the only step of setup. The acceptable image formats are bmp, png and
 
 ## Shortcuts
 
-- `s` = Shuffle images in list
-- `Left` or `Backspace` = Previous iamge
-- `Right` or `Space` or `n` = Next image
-- `Delete` = Send Current Image to Trash
-- `f` = Toggle Full screen mode
-- `v` = View image in File browser
-- `b` = bookmark current image
-- `1` = landscape images only
-- `2` = portrait images only
-- `3` = reset all
-- `r` = revert shuffle
-- `p` = toggle play/pause
-- `=` = increase timer by 1 second
-- `-` = decrease timer by 1 second
-- `+` = increase timer by 10 seconds
-- `_` = decrease timer by 10 seconds
+`s` = Shuffle images in list
+`Left` or `Backspace` = Previous iamge
+`Right` or `Space` or `n` = Next image
+`Delete` = Send Current Image to Trash
+`f` = Toggle Full screen mode
+`v` = View image in File browser
+`b` = bookmark current image
+`1` = landscape images only
+`2` = portrait images only
+`3` = reset all
+`r` = revert shuffle
+`p` = toggle play/pause
+`=` = increase timer by 1 second
+`-` = decrease timer by 1 second
+`+` = increase timer by 10 seconds
+`_` = decrease timer by 10 seconds
 
 That's all folks!
