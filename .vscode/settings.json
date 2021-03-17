@@ -1,10 +1,10 @@
 {
-    "python.unitTest.unittestArgs": [
+    "python.testing.unittestArgs": [
         "-v",
         "-s",
         "./toggle-wifi-hotspot-autoconnect",
         "-p",
         "*test*.py"
     ],
-    "python.unitTest.unittestEnabled": true
+    "python.testing.unittestEnabled": true
 }
