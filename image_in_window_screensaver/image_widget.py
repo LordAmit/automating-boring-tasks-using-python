@@ -4,7 +4,8 @@ import time
 from typing import List
 
 from PySide2.QtCore import Qt, Slot, QUrl, QTimer
-from PySide2.QtGui import QPixmap, QMouseEvent, QKeyEvent, QDesktopServices, QKeySequence
+from PySide2.QtGui import QPixmap, QMouseEvent, QKeyEvent, QDesktopServices, \
+    QKeySequence
 from PySide2.QtWidgets import QWidget, QLabel, QSizePolicy, QVBoxLayout
 from send2trash import send2trash
 
@@ -19,7 +20,8 @@ class ImageWidget(QWidget):
         QWidget.__init__(self)
         self._layout = QVBoxLayout()
         self._image_label = QLabel(self)
-        self._image_label.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Ignored)
+        self._image_label.setSizePolicy(QSizePolicy.Ignored,
+                                        QSizePolicy.Ignored)
         self._image_label.setScaledContents(True)
 
         # images_list
@@ -51,7 +53,8 @@ class ImageWidget(QWidget):
         self._current_index = 0
         self._shuffle_start_index = 0
         if current_image_path:
-            self._current_index = self.get_index_from_image_path(current_image_path)
+            self._current_index = self.get_index_from_image_path(
+                current_image_path)
             self._shuffle_start_index = self._current_index
         # self.image_shuffle()
         self._set_image(self._current_index)
@@ -109,7 +112,8 @@ class ImageWidget(QWidget):
         self._set_image(self._current_index)
 
     def _set_image(self, index):
-        if index > len(self._all_images) - 1 or index < -1 * len(self._all_images):
+        if index > len(self._all_images) - 1 or index < -1 * len(
+                self._all_images):
             l.log("error: resetting again")
             index = 0
         self._current_index = index
@@ -144,7 +148,8 @@ class ImageWidget(QWidget):
 
     def keyReleaseEvent(self, event: QKeyEvent):
         key = event.key()
-        l.log("Key event at top_level_widget: " + str(key) + " " + QKeySequence(key).toString())
+        l.log("Key event at top_level_widget: " + str(key) + " " + QKeySequence(
+            key).toString())
         if key == Qt.Key_S:
             l.log("Key S")
             self.image_shuffle()
@@ -205,6 +210,9 @@ class ImageWidget(QWidget):
         elif key == Qt.Key_Underscore:
             print("- pressed")
             self.decrease_timer(10)
+        elif key == Qt.Key_T:
+            print("T pressed")
+            self.increase_timer(bpg.max_interval)
         self.pause()
         self.setFocus()
         # self.set_title(self.get_current_image_path_str())
@@ -235,19 +243,24 @@ class ImageWidget(QWidget):
             l.log("stopping: auto_play: " + str(self.is_playing))
             self.timer.stop()
 
-    def increase_timer(self, time = 1):
+    def increase_timer(self, time=1):
         if (bpg.pause_secs + time) >= bpg.max_interval:
-            return
-        bpg.pause_secs += time
-        l.log("increasing pause_secs for autoplay: "+str(bpg.pause_secs))
+            bpg.pause = bpg.max_interval
+
+        else:
+            bpg.pause_secs += time
+        l.log("increasing pause_secs for autoplay: " + str(bpg.pause_secs))
         self.timer.setInterval(bpg.pause_secs * 1000)
 
-    def decrease_timer(self, time = 1):
+    def decrease_timer(self, time=1):
         if (bpg.pause_secs - time) < bpg.least_interval:
-            l.log("ignoring decrease timer command as current value too low: "+str(bpg.pause_secs))
-            return
-        bpg.pause_secs -= time
-        l.log("decreasing pause_secs for autoplay: "+str(bpg.pause_secs))
+            # l.log(
+            #     "ignoring decrease timer command as current value too low: " + str(
+            #         bpg.pause_secs))
+            bpg.pause_secs = bpg.least_interval
+        else:
+            bpg.pause_secs -= time
+        l.log("decreasing pause_secs for autoplay: " + str(bpg.pause_secs))
         self.timer.setInterval(bpg.pause_secs * 1000)
 
     def get_current_image_path_str(self) -> str:
