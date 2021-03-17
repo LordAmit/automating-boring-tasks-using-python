@@ -212,7 +212,7 @@ class ImageWidget(QWidget):
             self.decrease_timer(10)
         elif key == Qt.Key_T:
             print("T pressed")
-            self.increase_timer(bpg.max_interval)
+            self.increase_timer(bpg.max_pause_secs)
         self.pause()
         self.setFocus()
         # self.set_title(self.get_current_image_path_str())
@@ -244,20 +244,19 @@ class ImageWidget(QWidget):
             self.timer.stop()
 
     def increase_timer(self, time=1):
-        if (bpg.pause_secs + time) >= bpg.max_interval:
-            bpg.pause = bpg.max_interval
-
+        if (bpg.pause_secs + time) >= bpg.max_pause_secs:
+            bpg.pause_secs = bpg.max_pause_secs
         else:
             bpg.pause_secs += time
         l.log("increasing pause_secs for autoplay: " + str(bpg.pause_secs))
         self.timer.setInterval(bpg.pause_secs * 1000)
 
     def decrease_timer(self, time=1):
-        if (bpg.pause_secs - time) < bpg.least_interval:
+        if (bpg.pause_secs - time) < bpg.least_pause_secs:
             # l.log(
             #     "ignoring decrease timer command as current value too low: " + str(
             #         bpg.pause_secs))
-            bpg.pause_secs = bpg.least_interval
+            bpg.pause_secs = bpg.least_pause_secs
         else:
             bpg.pause_secs -= time
         l.log("decreasing pause_secs for autoplay: " + str(bpg.pause_secs))
