@@ -212,7 +212,7 @@ class ImageWidget(QWidget):
             self.decrease_timer(10)
         elif key == Qt.Key_Y:
             print("Y pressed")
-            self.decrease_timer(bpg.least_pause_secs)
+            self.decrease_timer(bpg.max_pause_secs)
         elif key == Qt.Key_T:
             print("T pressed")
             self.increase_timer(bpg.max_pause_secs)
