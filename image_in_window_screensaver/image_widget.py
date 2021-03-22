@@ -3,10 +3,10 @@ import random
 import time
 from typing import List
 
-from PySide2.QtCore import Qt, Slot, QUrl, QTimer
-from PySide2.QtGui import QPixmap, QMouseEvent, QKeyEvent, QDesktopServices, \
+from qtpy.QtCore import Qt, Slot, QUrl, QTimer
+from qtpy.QtGui import QPixmap, QMouseEvent, QKeyEvent, QDesktopServices, \
     QKeySequence
-from PySide2.QtWidgets import QWidget, QLabel, QSizePolicy, QVBoxLayout
+from qtpy.QtWidgets import QWidget, QLabel, QSizePolicy, QVBoxLayout
 from send2trash import send2trash
 
 import bad_practise_global as bpg

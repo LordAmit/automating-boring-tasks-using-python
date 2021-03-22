@@ -1,7 +1,6 @@
-#!./venv/bin/python3
 import os
 
-from PySide2.QtWidgets import (QMainWindow, QApplication, QSizePolicy, QWidget)
+from qtpy.QtWidgets import (QMainWindow, QApplication, QSizePolicy, QWidget)
 from PySide2.QtGui import QResizeEvent, QKeyEvent, QDesktopServices
 from PySide2.QtCore import QSize, Slot, QUrl
 import bad_practise_global as bpg
