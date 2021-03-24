@@ -48,8 +48,11 @@ class ImageWidget(QWidget):
         self.setLayout(self._layout)
         self.initialize_images()
 
-    def initialize_images(self, mode=None, current_image_path=None):
-        self._all_images: List = file_walker.walk(mode)
+    def initialize_images(self, mode=None, current_image_path=None,
+                          to_sort: bool = False,
+                          reverse_sort: bool = False):
+        self._all_images: List = file_walker.walk(mode, is_sorted=to_sort,
+                                                  reverse_sort=reverse_sort)
         self._current_index = 0
         self._shuffle_start_index = 0
         if current_image_path:
@@ -89,6 +92,15 @@ class ImageWidget(QWidget):
         print(self._current_index)
         current_image_path = self._all_images[self._current_index]
         self.initialize_images(file_walker.get_mode(), current_image_path)
+
+    def sort_by_date(self, reverse_sort: bool = False):
+        l.log("sorting images")
+        print(self._current_index)
+        current_image_path = self._all_images[self._current_index]
+        self.initialize_images(mode=file_walker.get_mode(),
+                               current_image_path=current_image_path,
+                               to_sort=True,
+                               reverse_sort=reverse_sort)
 
     def image_next(self):
         l.log("next")
@@ -147,6 +159,7 @@ class ImageWidget(QWidget):
         self.setWindowTitle(new_title)
 
     def keyReleaseEvent(self, event: QKeyEvent):
+
         key = event.key()
         l.log("Key event at top_level_widget: " + str(key) + " " + QKeySequence(
             key).toString())
@@ -191,9 +204,12 @@ class ImageWidget(QWidget):
             self._set_image(self._current_index)
         elif key == Qt.Key_R:
             self.revert_shuffle()
+        elif key == Qt.Key_D:
+            self.sort_by_date()
+        elif key == Qt.Key_E:
+            self.sort_by_date(reverse_sort=True)
         elif key == Qt.Key_3:
             l.log("Key 3 / Reset all")
-            self.initialize_images()
         elif key == Qt.Key_4:
             l.log("Key 4 / Set image to 0th Index in whatever sort")
             self._set_image(index=0)
