@@ -194,6 +194,9 @@ class ImageWidget(QWidget):
         elif key == Qt.Key_3:
             l.log("Key 3 / Reset all")
             self.initialize_images()
+        elif key == Qt.Key_4:
+            l.log("Key 4 / Set image to 0th Index in whatever sort")
+            self._set_image(index=0)
         elif key == Qt.Key_P:
             l.log("Key P / Play / Pause")
             self.toggle_play()
