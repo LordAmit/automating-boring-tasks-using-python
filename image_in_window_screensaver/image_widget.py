@@ -87,11 +87,13 @@ class ImageWidget(QWidget):
         # self._current_index = 0
         # self._set_image(self._current_index)
 
-    def revert_shuffle(self):
-        l.log("revert shuffle")
+    def reverse_sort(self):
+        l.log("reverse sort")
         print(self._current_index)
         current_image_path = self._all_images[self._current_index]
-        self.initialize_images(file_walker.get_mode(), current_image_path)
+        self._all_images.reverse()
+        self._current_index = self.get_index_from_image_path(current_image_path)
+
 
     def sort_by_date(self, reverse_sort: bool = False):
         l.log("sorting images")
@@ -203,7 +205,7 @@ class ImageWidget(QWidget):
                 self._current_index = 0
             self._set_image(self._current_index)
         elif key == Qt.Key_R:
-            self.revert_shuffle()
+            self.reverse_sort()
         elif key == Qt.Key_D:
             self.sort_by_date()
         elif key == Qt.Key_E:
