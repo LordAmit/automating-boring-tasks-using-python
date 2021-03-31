@@ -42,11 +42,16 @@ So, that's the only step of setup. The acceptable image formats are bmp, png and
 - `1` = landscape images only
 - `2` = portrait images only
 - `3` = reset all
-- `r` = revert shuffle
+- `4` = Go to the 1st Image, in whatever applied sort
+- `r` = reverse sort
+- `e` = sort by date (new to old)
+- `d` = sort by date (old to new)
 - `p` = toggle play/pause
-- `=` = increase timer by 1 second
-- `-` = decrease timer by 1 second
-- `+` = increase timer by 10 seconds
-- `_` = decrease timer by 10 seconds
+- `t` = pomodoro time mode, delay increased to 25 minutes
+- `y` = fast mode, delay decreased to 1 second  
+- `=` = increase delay by 1 second
+- `-` = decrease delay by 1 second
+- `+` = increase delay by 10 seconds
+- `_` = decrease delay by 10 seconds
 
 That's all folks!
