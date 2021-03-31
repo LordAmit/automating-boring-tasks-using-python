@@ -5,7 +5,7 @@ click==7.1.2
 cryptography==2.9.2
 gplaycli==3.29
 idna==2.9
-lxml==4.5.0
+lxml==4.6.3
 matlink-gpapi==0.4.4.5
 protobuf==3.11.3
 pyaxmlparser==0.3.24
