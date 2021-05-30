@@ -104,17 +104,17 @@ class ImageWidget(QWidget):
                                to_sort=True,
                                reverse_sort=reverse_sort)
 
-    def image_next(self):
+    def image_next(self, step: int = 1):
         l.log("next")
-        self._current_index += 1
+        self._current_index += step
         if self._current_index > len(self._all_images):
             self._current_index = 0
         self._set_image(self._current_index)
         # self.setFocus()
 
-    def image_previous(self):
+    def image_previous(self, step: int = 1):
         l.log("previous")
-        self._current_index -= 1
+        self._current_index -= step
         if self._current_index <= -1 * len(self._all_images):
             self._current_index = 0
         self._set_image(self._current_index)
@@ -161,10 +161,11 @@ class ImageWidget(QWidget):
         self.setWindowTitle(new_title)
 
     def keyReleaseEvent(self, event: QKeyEvent):
-
         key = event.key()
+        text = event.text()
+
         l.log("Key event at top_level_widget: " + str(key) + " " + QKeySequence(
-            key).toString())
+            key).toString() + "text: " +text)
         if key == Qt.Key_S:
             l.log("Key S")
             self.image_shuffle()
@@ -174,6 +175,12 @@ class ImageWidget(QWidget):
         elif key == Qt.Key_Right or key == Qt.Key_N or key == Qt.Key_Space:
             l.log("Key Right / N / Space")
             self.image_next()
+        elif key == Qt.Key_Greater:
+            l.log("> pressed")
+            self.image_next(10)
+        elif key == Qt.Key_Less:
+            l.log("< pressed")
+            self.image_previous(10)
         elif key == Qt.Key_Delete:
             l.log("Key Delete")
             self.image_delete()

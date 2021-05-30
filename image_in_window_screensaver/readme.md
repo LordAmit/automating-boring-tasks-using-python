@@ -33,19 +33,24 @@ So, that's the only step of setup. The acceptable image formats are bmp, png and
 ## Shortcuts
 
 - `s` = Shuffle images in list
-- `Left` or `Backspace` = Previous iamge
+- `Left` or `Backspace` = Previous image
 - `Right` or `Space` or `n` = Next image
+- `<` or `shift+,` = Previous 10th image
+- `>` or `shift+.` = Next 10th image
 - `Delete` = Send Current Image to Trash
+  
 - `f` = Toggle Full screen mode
 - `v` = View image in File browser
 - `b` = bookmark current image
+
 - `1` = landscape images only
 - `2` = portrait images only
 - `3` = reset all
 - `4` = Go to the 1st Image, in whatever applied sort
-- `r` = reverse sort
+- `r` = reverse the current order
 - `e` = sort by date (new to old)
 - `d` = sort by date (old to new)
+
 - `p` = toggle play/pause
 - `t` = pomodoro time mode, delay increased to 25 minutes
 - `y` = fast mode, delay decreased to 1 second  
