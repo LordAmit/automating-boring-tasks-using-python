@@ -4,9 +4,9 @@ import os
 
 from PIL import Image
 
-from PyQt5.QtWidgets import (
+from qtpy.QtWidgets import (
     QGraphicsScene, QMainWindow, QFileDialog, QApplication)
-from PyQt5.QtGui import QPixmap
+from qtpy.QtGui import QPixmap
 import sys
 import gui_window
 
@@ -85,7 +85,8 @@ class Image_Note(QMainWindow, gui_window.Ui_MainWindow):
 
     def browse_pdf_file(self):
         self.pdf_file_address = QFileDialog.getOpenFileName(
-            self, 'Open PDF File')
+            self, 'Open PDF File')[0]
+        # print(self.pdf_file_address[0])
         self.file_address = file_handler.change_path_extension(
             self.pdf_file_address, ".png")
         convert_util.convert_pdf_to_image(
@@ -122,7 +123,7 @@ def main():
     app = QApplication(sys.argv)
     form = Image_Note()
     form.show()
-    app.exec()
+    app.exec_()
 
 
 if __name__ == '__main__':
