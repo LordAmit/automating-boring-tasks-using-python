@@ -31,6 +31,7 @@ def _get_arguments():
     parser = argparse.ArgumentParser()
     parser.add_argument('--ignore', type=str, help='keywords to be ignored while parsing files')
     parser.add_argument('--path', type=str, help='address from where images will be pursed', required=True)
+    parser.add_argument('--backup', type=str, help='directory path for backing up non-compressed images')
     args = parser.parse_args()
     _file_path = args.path
     if args.ignore:
