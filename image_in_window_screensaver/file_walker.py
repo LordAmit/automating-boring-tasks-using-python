@@ -1,7 +1,7 @@
 from logging import currentframe
-from os import path as Path
+from os import path
 from typing import List
-import custom_log as l
+import custom_log as c_log
 import os
 import argument_handler as argh
 
@@ -13,30 +13,34 @@ def get_mode():
 
 
 def walk(mode=None, is_sorted: bool = False,
-         reverse_sort: bool = False) -> List:
+         reverse_sort: bool = False, dir_path: str = argh.get_path(),
+         increasing_size_sort: bool = False) -> List:
     """
-    walks through a path to return list of absolute path of images with png or jpg extensions
+    walks through a path to return list of absolute path of images with png or
+    jpg extensions
+    :param reverse_sort: allows sorting in reverse
     :param is_sorted: can sort based on time-date
     :param mode: can be landscape or portrait
-    :param path: to the directory where images will be searched for
+    :param dir_path: to the directory where images will be searched for, defaults
+    to argument
     :return: List of string path of images
     """
     image_paths = []
-    path: str = argh.get_path()
+    # path: str = argh.get_path()
     if mode:
-        path += mode
+        dir_path += mode
         global current_mode
         current_mode = mode
-    l.log(path)
+    c_log.log(dir_path)
     ignore: str = argh.get_ignore_word()
-    l.log("checking path integrity")
-    if Path.exists(path):
-        l.log([path, "exists"])
+    c_log.log("checking path integrity")
+    if path.exists(dir_path):
+        c_log.log([dir_path, "exists"])
     else:
-        l.log("path does not exist")
+        c_log.log("path does not exist")
         exit()
     # l.disable()
-    for folderName, subfolders, filenames in os.walk(path):
+    for folderName, sub_folders, filenames in os.walk(dir_path):
         for filename in filenames:
             if (filename.endswith('jpg') or
                     filename.endswith('.png') or
@@ -52,10 +56,12 @@ def walk(mode=None, is_sorted: bool = False,
         image_paths = sorted(image_paths, key=os.path.getmtime)
     if reverse_sort:
         image_paths = sorted(image_paths, key=os.path.getmtime, reverse=True)
+    if increasing_size_sort:
+        image_paths = sorted(image_paths, key=os.path.getsize, reverse=True)
     return image_paths
 
 
-def is_exclude_image(image_path: str, ignore_word: str) -> str:
+def is_exclude_image(image_path: str, ignore_word: str) -> bool:
     import custom_log as l
     l.log(ignore_word)
     # exit()
