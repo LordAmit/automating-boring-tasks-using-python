@@ -7,7 +7,7 @@ gplaycli==3.29
 idna==2.9
 lxml==4.5.0
 matlink-gpapi==0.4.4.5
-protobuf==3.11.3
+protobuf==3.15.0
 pyaxmlparser==0.3.24
 pycparser==2.20
 requests==2.23.0
