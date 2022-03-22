@@ -16,7 +16,7 @@ class LandPortSort:
         self.landscape_dir:str = self.cur_dir+"landscape/"
         self.portrait_dir:str = self.cur_dir+"portrait/"
         self.image_list : List = []
-        self.image_exts: List = ['.jpg', '.jpeg', '.png', '.bmp']
+        self.image_exts: List = ['.jpg', '.jpeg', '.png', '.bmp', '.webp']
 
         # print(self.cur_dir)
 
