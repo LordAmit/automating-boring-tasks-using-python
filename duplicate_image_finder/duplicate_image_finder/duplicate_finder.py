@@ -1,21 +1,3 @@
-# import os
-# import magic
-# import math
-# from pprint import pprint
-
-# from subprocess import Popen, PIPE, TimeoutExpired
-# from tempfile import TemporaryDirectory
-# import webbrowser
-
-
-# from flask import Flask
-# from flask_cors import CORS
-# import imagehash
-# from jinja2 import FileSystemLoader, Environment
-# from more_itertools import chunked
-# from PIL import Image, ExifTags
-# from termcolor import cprint
-
 import concurrent.futures
 import argparse
 import shutil
@@ -28,6 +10,12 @@ import argparse
 
 from PIL import Image, ExifTags
 
+# code inspired from https://github.com/philipbl/duplicate-images.git
+# doing this because,
+# 1) learning poetry
+# 2) original does not work / can not make it work
+# 3) don't want mongo
+# 4) just so
 
 def _get_file_size(file_name):
     try:
