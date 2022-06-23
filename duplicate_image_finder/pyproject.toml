@@ -5,13 +5,14 @@ description = ""
 authors = ["Amit <lordamit@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.9"
 Flask = "^2.1.2"
-python-magic-bin = "^0.4.14"
 Pillow = "^9.1.1"
 termcolor = "^1.1.0"
-python-magic = "^0.4.27"
 types-termcolor = "^1.1.4"
+pandas = "^1.4.2"
+python-magic-bin = "0.4.14"
+ImageHash = "^4.2.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
