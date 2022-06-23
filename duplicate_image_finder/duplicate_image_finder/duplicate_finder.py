@@ -256,9 +256,7 @@ def find_groups(hashes: List, threshold: int = 4) -> List:
         if diff > threshold:
             groups.append((m, n-1))
             m = n
-            n += 1
-        else:
-            n += 1
+        n += 1
         if n >= len(hashes):
             if m != n-1:
                 last_group_diff: int = abs(hashes[m] - hashes[n-1])
@@ -374,7 +372,7 @@ def connect_to_db(db_conn_string: str) -> sqlite3.Connection:
 
 
 def imagehash_diff(hexstr1: str, hexstr2: str):
-    return imagehash.hex_to_hash(hexstr1)-imagehash.hex_to_hash(hexstr2)
+    return abs(imagehash.hex_to_hash(hexstr1) - imagehash.hex_to_hash(hexstr2))
 
 
 def create_table(cursor: sqlite3.Cursor):
@@ -442,7 +440,7 @@ if __name__ == '__main__':
     find_exact_duplicate_image_hashes(cursor)
     list_all(cursor)
     cursor.connection.close()
-    print(imagehash_diff('f2c34972aace9670', 'eee4853a6087f686'))
+    print(type(imagehash_diff('f2c34972aace9670', 'eee4853a6087f686')))
     # if args.parallel:
     #     NUM_PROCESSES = int(args.parallel)
     # else:
