@@ -1,5 +1,43 @@
+from typing import List
 from duplicate_image_finder import __version__
+import duplicate_image_finder.duplicate_finder as dup
 
 
-def test_version():
-    assert __version__ == '0.1.0'
+class TestClass:
+    def test_version(self):
+        assert __version__ == '0.1.0'
+
+    def test_find_groups(self):
+        threshold: int = 4
+        input1: List = [1, 2, 3, 7, 8, 19, 20, 21]
+        #              [0, 1, 2, 3, 4,  5,  6,  7]
+        input2: List = [1, 2, 3, 7, 8, 19, 20, 21, 70]
+        #              [0, 1, 2, 3, 4,  5,  6,  7,  8]
+        input3: List = []
+        input4: List = [1, 2, 3, 4]
+        #              [0, 1, 2, 3]
+
+        expected_output1 = [(0, 2), (3, 4), (5, 7)]
+        expected_output2 = [(0, 2), (3, 4), (5, 7)]
+        expected_output3 = []
+        expected_output4 = [(0, 3)]
+
+        output = dup.find_groups(input1, threshold)
+        print(output)
+        print(expected_output1)
+        assert output == expected_output1
+
+        output = dup.find_groups(input2, threshold)
+        print(output)
+        print(expected_output2)
+        assert output == expected_output2
+
+        output = dup.find_groups(input3, threshold)
+        print(output)
+        print(expected_output2)
+        assert output == expected_output3
+
+        output = dup.find_groups(input4, threshold)
+        print(output)
+        print(expected_output4)
+        assert output == expected_output4

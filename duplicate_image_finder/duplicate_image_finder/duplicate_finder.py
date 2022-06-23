@@ -91,14 +91,16 @@ def hash_file(file):
         capture_time = _get_capture_time(img)
 
         # hash the image 4 times and rotate it by 90 degrees each time
-        for angle in [0, 90, 180, 270]:
-            if angle > 0:
-                turned_img = img.rotate(angle, expand=True)
-            else:
-                turned_img = img
-            hashes.append(str(imagehash.phash(turned_img)))
+        # for angle in [0, 90, 180, 270]:
+        #     if angle > 0:
+        #         turned_img = img.rotate(angle, expand=True)
+        #     else:
+        #         turned_img = img
+        #     hashes.append(str(imagehash.phash(turned_img)))
 
-        hashes = ''.join(sorted(hashes))
+        # hashes = ''.join(sorted(hashes))
+
+        hashes = str(imagehash.phash(img))
 
         cprint("\tHashed {}".format(file), "blue")
         return file, hashes, file_size, image_size, capture_time
@@ -129,7 +131,7 @@ def _add_to_database(file_, hash_, file_size, image_size, capture_time, db):
     pass
 
 
-def _in_database(file: str, connect: sqlite3.Connection):
+def _in_database(file: str, connect: sqlite3.Cursor):
     sql = '''
     select id from images
     where id = "{}"
@@ -138,7 +140,7 @@ def _in_database(file: str, connect: sqlite3.Connection):
     return result
 
 
-def new_image_files(files, connect: sqlite3.Connection):
+def new_image_files(files, connect: sqlite3.Cursor):
     for file in files:
         if _in_database(file, connect):
             cprint("\tAlready hashed {}".format(file), "green")
@@ -148,6 +150,17 @@ def new_image_files(files, connect: sqlite3.Connection):
 
 def prepare_results(file_, hash_, file_size, image_size, capture_time):
     pass
+
+
+def list_all(cursor: sqlite3.Cursor):
+    query = '''
+    select hashes, id from images
+    order by hashes desc
+    ;'''
+    cursor.execute(query)
+    hashes: List = cursor.fetchall()
+    for hash in hashes:
+        print(hash)
 
 
 def find_exact_duplicate_image_hashes(cursor: sqlite3.Cursor):
@@ -165,17 +178,13 @@ def find_exact_duplicate_image_hashes(cursor: sqlite3.Cursor):
     return hashes
 
 
-
-def add(paths, connect: sqlite3.Connection, num_processes=None):
+def add(paths, cursor: sqlite3.Cursor, num_processes=None):
     for path in paths:
         cprint("Hashing {}".format(path), "blue")
         files = get_image_files(path)
-        files = new_image_files(files, connect)
-        # for result in files:
-        #     print(result)
+        files = new_image_files(files, cursor)
         results: List = []
         for result in hash_files_parallel(files, num_processes):
-            # _add_to_database(*result, connect=connect)
             results.append((
                 result[0],
                 result[1],
@@ -184,11 +193,11 @@ def add(paths, connect: sqlite3.Connection, num_processes=None):
                 result[4])
             )
         sql = 'INSERT into images values(?,?,?,?,?);'
-        result = connect.executemany(sql, results)
+        result = cursor.executemany(sql, results)
 
         cprint("...done inserting "+str(result.rowcount), "blue")
-        connect.commit()
-        connect.close()
+        cursor.connection.commit()
+
 
 def remove(paths, db):
     for path in paths:
@@ -232,6 +241,31 @@ def same_time(dup):
     #     return False
 
     # return True
+
+
+def find_groups(hashes: List, threshold: int = 4) -> List:
+    groups: List = []
+    if len(hashes) <= 1:
+        return []
+    print(str(hashes))
+    m = 0
+    n = 1
+    for i in range(0, len(hashes)):
+        print(m, n, len(hashes))
+        diff: int = abs(hashes[m] - hashes[n])
+        if diff > threshold:
+            groups.append((m, n-1))
+            m = n
+            n += 1
+        else:
+            n += 1
+        if n >= len(hashes):
+            if m != n-1:
+                last_group_diff: int = abs(hashes[m] - hashes[n-1])
+                if last_group_diff <= threshold:
+                    groups.append((m, n-1))
+            break
+    return groups
 
 
 def find(db, match_time=False):
@@ -339,7 +373,11 @@ def connect_to_db(db_conn_string: str) -> sqlite3.Connection:
     return connect
 
 
-def create_table(connect: sqlite3.Connection):
+def imagehash_diff(hexstr1: str, hexstr2: str):
+    return imagehash.hex_to_hash(hexstr1)-imagehash.hex_to_hash(hexstr2)
+
+
+def create_table(cursor: sqlite3.Cursor):
     cprint("creating table in db", "blue")
     sql = '''
     create table images
@@ -352,9 +390,9 @@ def create_table(connect: sqlite3.Connection):
     );
     '''
     try:
-        connect.execute(sql)
+        cursor.execute(sql)
         cprint("Table created!", "green")
-        connect.commit()
+        cursor.connection.commit()
     except sqlite3.OperationalError:
         cprint("Table already exists", "red")
 
@@ -397,14 +435,14 @@ if __name__ == '__main__':
         DB_PATH = args.db
     else:
         DB_PATH = "./duplicate.sqlite"
-    connect = connect_to_db(DB_PATH)
-    create_table(connect)
-    # _in_database('/Users/amitseal/pics/test/2020-05-01.jpg', connect)
-    add(["/Users/amitseal/pics/test/"], connect)
-    connect.close()
     cursor = connect_to_db(DB_PATH).cursor()
+    create_table(cursor)
+    # _in_database('/Users/amitseal/pics/test/2020-05-01.jpg', connect)
+    add(["/Users/amitseal/pics/test/"], cursor)
     find_exact_duplicate_image_hashes(cursor)
-    connect.close()
+    list_all(cursor)
+    cursor.connection.close()
+    print(imagehash_diff('f2c34972aace9670', 'eee4853a6087f686'))
     # if args.parallel:
     #     NUM_PROCESSES = int(args.parallel)
     # else:
