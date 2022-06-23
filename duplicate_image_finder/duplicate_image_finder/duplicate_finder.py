@@ -1,14 +1,18 @@
 import concurrent.futures
 import argparse
+import re
 import shutil
 import os
+from typing import List
+from venv import create
 import magic
 from termcolor import cprint
 from pprint import pprint
 import imagehash
 import argparse
-
+import json
 from PIL import Image, ExifTags
+import sqlite3
 
 # code inspired from https://github.com/philipbl/duplicate-images.git
 # doing this because,
@@ -16,6 +20,15 @@ from PIL import Image, ExifTags
 # 2) original does not work / can not make it work
 # 3) don't want mongo
 # 4) just so
+
+# data = {}
+# file, hashes, file_size, image_size, capture_time
+# cols = ["file",
+#         "hashes",
+#         "file_size",
+#         "image_size",
+#         "capture_time"]
+
 
 def _get_file_size(file_name):
     try:
@@ -103,6 +116,7 @@ def hash_files_parallel(files, num_processes=None):
 
 
 def _add_to_database(file_, hash_, file_size, image_size, capture_time, db):
+    #
     # TODO
     # try:
     #     db.insert_one({"_id": file_,
@@ -115,31 +129,66 @@ def _add_to_database(file_, hash_, file_size, image_size, capture_time, db):
     pass
 
 
-def _in_database(file, db):
-    # TODO
-    # return db.count({"_id": file}) > 0
-    pass
+def _in_database(file: str, connect: sqlite3.Connection):
+    sql = '''
+    select id from images
+    where id = "{}"
+    ;'''.format(file)
+    result = connect.execute(sql).fetchone()
+    return result
 
 
-def new_image_files(files, db):
+def new_image_files(files, connect: sqlite3.Connection):
     for file in files:
-        if _in_database(file, db):
+        if _in_database(file, connect):
             cprint("\tAlready hashed {}".format(file), "green")
         else:
             yield file
 
 
-def add(paths, db, num_processes=None):
+def prepare_results(file_, hash_, file_size, image_size, capture_time):
+    pass
+
+
+def find_exact_duplicate_image_hashes(cursor: sqlite3.Cursor):
+
+    query = '''
+    select hashes
+    from images
+    group by hashes
+    having count(hashes)>=2
+    order by count(hashes) desc
+    ;'''
+    cursor.execute(query)
+    hashes: List = cursor.fetchall()
+    cprint("found exact " + str(len(hashes)) + " images", "blue")
+    return hashes
+
+
+
+def add(paths, connect: sqlite3.Connection, num_processes=None):
     for path in paths:
         cprint("Hashing {}".format(path), "blue")
         files = get_image_files(path)
-        files = new_image_files(files, db)
-
+        files = new_image_files(files, connect)
+        # for result in files:
+        #     print(result)
+        results: List = []
         for result in hash_files_parallel(files, num_processes):
-            _add_to_database(*result, db=db)
+            # _add_to_database(*result, connect=connect)
+            results.append((
+                result[0],
+                result[1],
+                result[2],
+                result[3],
+                result[4])
+            )
+        sql = 'INSERT into images values(?,?,?,?,?);'
+        result = connect.executemany(sql, results)
 
-        cprint("...done", "blue")
-
+        cprint("...done inserting "+str(result.rowcount), "blue")
+        connect.commit()
+        connect.close()
 
 def remove(paths, db):
     for path in paths:
@@ -285,32 +334,58 @@ def cleanup_db(db):
     #         remove_image(image_path, db)
 
 
-def connect_to_db(db_conn_string: str):
-    pass
+def connect_to_db(db_conn_string: str) -> sqlite3.Connection:
+    connect = sqlite3.connect(db_conn_string)
+    return connect
+
+
+def create_table(connect: sqlite3.Connection):
+    cprint("creating table in db", "blue")
+    sql = '''
+    create table images
+    (
+        id TEXT Primary Key NOT NULL,
+        hashes TEXT NOT NULL,
+        file_size TEXT NOT NULL,
+        image_size TEXT NOT NULL,
+        image_date TEXT NOT NULL
+    );
+    '''
+    try:
+        connect.execute(sql)
+        cprint("Table created!", "green")
+        connect.commit()
+    except sqlite3.OperationalError:
+        cprint("Table already exists", "red")
 
 
 if __name__ == '__main__':
+    # pprint(hash_file("/Users/amitseal/pics/test/2020-05-01.jpg"))
     # from docopt import docopt
 
     # args = docopt(__doc__)
+
     parser = argparse.ArgumentParser(description='duplicate image finder')
+
     # parser.add_argument('integers', metavar='N', type=int, nargs='+',
     #                 help='an integer for the accumulator')
     # parser.add_argument('--sum', dest='accumulate', action='store_const',
     #                 const=sum, default=max,
     #                 help='sum the integers (default: find the max)')
-    parser.add_argument('add')
-    parser.add_argument('remove')
-    parser.add_argument('clear')
-    parser.add_argument('show')
-    parser.add_argument('find')
-    parser.add_argument('--delete')
-    parser.add_argument('--print')
+
+    # parser.add_argument('add')
+    # parser.add_argument('remove')
+    # parser.add_argument('clear')
+    # parser.add_argument('show')
+    # parser.add_argument('find')
+    # parser.add_argument('--delete')
+    # parser.add_argument('--print')
     parser.add_argument('--db')
-    parser.add_argument('--parallel')
-    parser.add_argument('cleanup')
-    parser.add_argument('--match_time')
+    # parser.add_argument('--parallel')
+    # parser.add_argument('cleanup')
+    # parser.add_argument('--match_time')
     args = parser.parse_args()
+
     # print(args.accumulate(args.integers))
 
     # if args['--trash']:
@@ -321,32 +396,40 @@ if __name__ == '__main__':
     if args.db:
         DB_PATH = args.db
     else:
-        DB_PATH = "./db"
-    if args.parallel:
-        NUM_PROCESSES = int(args.parallel)
-    else:
-        NUM_PROCESSES = 0
+        DB_PATH = "./duplicate.sqlite"
+    connect = connect_to_db(DB_PATH)
+    create_table(connect)
+    # _in_database('/Users/amitseal/pics/test/2020-05-01.jpg', connect)
+    add(["/Users/amitseal/pics/test/"], connect)
+    connect.close()
+    cursor = connect_to_db(DB_PATH).cursor()
+    find_exact_duplicate_image_hashes(cursor)
+    connect.close()
+    # if args.parallel:
+    #     NUM_PROCESSES = int(args.parallel)
+    # else:
+    #     NUM_PROCESSES = 0
 
-    with connect_to_db(db_conn_string=DB_PATH) as db:
-        if args.add:
-            # add(args['<path>'], db, NUM_PROCESSES)
-            pass
-        elif args.remove:
-            # remove(args['<path>'], db)
-            pass
-        elif args.clear:
-            clear(db)
-        elif args.show:
-            show(db)
-        elif args.find:
-            dups = find(db, args.match_time)
+    # with connect_to_db(db_conn_string=DB_PATH) as db:
+    # if args.add:
+    #     # add(args['<path>'], db, NUM_PROCESSES)
+    #     pass
+    # elif args.remove:
+    #     # remove(args['<path>'], db)
+    #     pass
+    # elif args.clear:
+    #     clear(db)
+    # elif args.show:
+    #     show(db)
+    # elif args.find:
+    #     dups = find(db, args.match_time)
 
-            if args.delete:
-                delete_duplicates(dups, db)
-            elif args.print:
-                pprint(dups)
-                print("Number of duplicates: {}".format(len(dups)))
-            else:
-                display_duplicates(dups, db=db)
-        elif args.cleanup:
-            cleanup_db(db)
+    #     if args.delete:
+    #         delete_duplicates(dups, db)
+    #     elif args.print:
+    #         pprint(dups)
+    #         print("Number of duplicates: {}".format(len(dups)))
+    #     else:
+    #         display_duplicates(dups, db=db)
+    # elif args.cleanup:
+    #     cleanup_db(db)
