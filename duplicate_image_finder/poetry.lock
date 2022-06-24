@@ -59,6 +59,18 @@ async = ["asgiref (>=3.2)"]
 dotenv = ["python-dotenv"]
 
 [[package]]
+name = "flask-cors"
+version = "3.0.10"
+description = "A Flask extension adding a decorator for CORS support"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+Flask = ">=0.9"
+Six = "*"
+
+[[package]]
 name = "imagehash"
 version = "4.2.1"
 description = "Image Hashing library"
@@ -338,7 +350,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "cbc71802862d5517a801721bfa32136605c82a5453e2f47e955b3d67f3830e04"
+content-hash = "90fb69705a1d57ab4359406a94856d79c22f9037622088ba8cc55d6b2210febd"
 
 [metadata.files]
 atomicwrites = [
@@ -360,6 +372,10 @@ colorama = [
 flask = [
     {file = "Flask-2.1.2-py3-none-any.whl", hash = "sha256:fad5b446feb0d6db6aec0c3184d16a8c1f6c3e464b511649c8918a9be100b4fe"},
     {file = "Flask-2.1.2.tar.gz", hash = "sha256:315ded2ddf8a6281567edb27393010fe3406188bafbfe65a3339d5787d89e477"},
+]
+flask-cors = [
+    {file = "Flask-Cors-3.0.10.tar.gz", hash = "sha256:b60839393f3b84a0f3746f6cdca56c1ad7426aa738b70d6c61375857823181de"},
+    {file = "Flask_Cors-3.0.10-py2.py3-none-any.whl", hash = "sha256:74efc975af1194fc7891ff5cd85b0f7478be4f7f59fe158102e91abb72bb4438"},
 ]
 imagehash = [
     {file = "ImageHash-4.2.1.tar.gz", hash = "sha256:a4af957814bc9832d9241247ff03f76e778f890c18147900b4540af124e93011"},

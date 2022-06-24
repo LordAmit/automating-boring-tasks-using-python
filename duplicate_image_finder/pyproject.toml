@@ -13,6 +13,8 @@ types-termcolor = "^1.1.4"
 pandas = "^1.4.2"
 python-magic-bin = "0.4.14"
 ImageHash = "^4.2.1"
+Flask-Cors = "^3.0.10"
+Jinja2 = "^3.1.2"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
