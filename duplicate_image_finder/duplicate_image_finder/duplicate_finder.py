@@ -1,19 +1,26 @@
 import concurrent.futures
 import argparse
 from concurrent.futures import thread
-import re
 import shutil
 import os
-from typing import List
+from typing import Dict, List
 from venv import create
+from flask import Flask
+from flask_cors import CORS
 import magic
 from termcolor import cprint
+from tempfile import TemporaryDirectory
 from pprint import pprint
 import imagehash
 import argparse
 import json
 from PIL import Image, ExifTags
 import sqlite3
+from jinja2 import FileSystemLoader, Environment
+from more_itertools import chunked
+import webbrowser
+import math
+
 
 # code inspired from https://github.com/philipbl/duplicate-images.git
 # doing this because,
@@ -246,10 +253,18 @@ def remove(paths, db):
         #     remove_image(file, db)
 
 
-def remove_image(file, db):
+def remove_image(file, cursor: sqlite3.Cursor):
+    query = '''
+    Delete from Images
+    where id = "{}";
+    '''
+    query = query.format(file)
+    cprint(query, "red")
+    cursor.execute(query)
+    cursor.connection.commit()
     # TODO
     # db.delete_one({'_id': file})
-    pass
+    # pass
 
 
 def clear(db):
@@ -280,8 +295,8 @@ def same_time(dup):
     # return True
 
 
-def find_groups(entities: List, diff_method,
-                threshold: int = 4) -> List:
+def find_duplicate_groups_indices(entities: List, diff_method,
+                                  threshold: int = 4) -> List:
     groups: List = []
     if len(entities) <= 1:
         return []
@@ -319,14 +334,6 @@ def find_groups(entities: List, diff_method,
             n = n + 1
     return groups
 
-# def package_duplicates(entities: List[ImageHolder], groups: List):
-#     duplicates = {}
-#     for i in range(0, len(groups)):
-#         start, end = groups[i]
-#         for j in range(start, end + 1):
-#             duplicates['id'] = i
-#             duplicates["items"] = entities[start:end]
-
 
 def print_duplicates(entities: List[ImageHolder], groups: List):
     cprint("printing duplicates now")
@@ -336,6 +343,41 @@ def print_duplicates(entities: List[ImageHolder], groups: List):
         for j in range(start, end+1):
             cprint(entities[j], "yellow")
 
+
+def package_duplicates(entities: List[ImageHolder], groups: List):
+    duplicate_groups: List = []
+    # {% for dup in duplicates %}
+    # <div class="row" style="margin: 15px; margin-bottom: 30px;">
+    #     {% set names = dup['items'] %}
+    # <img class="img-responsive" src="{{ img['file_name'] }}" alt="{{ img['file_name'] }}">
+    # <div class="caption">
+    #     <h5 class="name">{{ img['file_name'] }}</h5>
+    #     <div class="file-size">{{ img['file_size'] | filesizeformat }}</div>
+    #     <div class="resolution">{{ img['image_size'] }}</div>
+    #     <div class="capture-time">{{ img['capture_time'] }}</div>
+    #     <button class="btn btn-danger delete-btn" role="button" data-name="{{ img['file_name'] }}" style="margin-top: 15px">
+
+    cprint("packaging duplicates now")
+
+    for i in range(0, len(groups)):
+        current_duplicate_group: Dict = {}
+
+        start, end = groups[i]
+        cprint("group "+str(i), "blue")
+
+        current_duplicate_group['_id'] = i
+        current_duplicate_group['items'] = []
+        current_duplicate_group['total'] = (end-start+1)
+        for j in range(start, end+1):
+            cprint(entities[j], "yellow")
+            current_duplicate_group['items'].append({
+                "file_name": entities[j].file_path,
+                "file_size": entities[j].file_size,
+                "image_size": entities[j].image_size,
+                "capture_time": entities[j].capture_time
+            })
+        duplicate_groups.append(current_duplicate_group)
+    return duplicate_groups
 
 
 def find(db, match_time=False):
@@ -367,13 +409,16 @@ def find(db, match_time=False):
     # return list(dups)
 
 
-def delete_picture(file_name, db, trash="./Trash/"):
+def delete_picture(file_name, cursor: sqlite3.Cursor, trash="./Trash/"):
     cprint("Moving {} to {}".format(file_name, trash), 'yellow')
     if not os.path.exists(trash):
         os.makedirs(trash)
     try:
+
         shutil.move(file_name, trash + os.path.basename(file_name))
-        remove_image(file_name, db)
+        cprint("shutil works", "red")
+        remove_image(file_name, cursor)
+        cprint("remove_image works", "red")
     except FileNotFoundError:
         cprint("File not found {}".format(file_name), 'red')
         return False
@@ -391,40 +436,43 @@ def delete_duplicates(duplicates, db):
                                         len(results)), 'yellow')
 
 
-# def display_duplicates(duplicates, db, trash="./Trash/"):
-#     # TODO
-#     pass
-    # from werkzeug.routing import PathConverter
-    # class EverythingConverter(PathConverter):
-    #     regex = '.*?'
+def display_duplicates(duplicates, cursor: sqlite3.Cursor, trash="./Trash/"):
+    # TODO
+    pass
+    from werkzeug.routing import PathConverter
 
-    # app = Flask(__name__)
-    # CORS(app)
-    # app.url_map.converters['everything'] = EverythingConverter
+    class EverythingConverter(PathConverter):
+        regex = '.*?'
 
-    # def render(duplicates, current, total):
-    #     env = Environment(loader=FileSystemLoader('template'))
-    #     template = env.get_template('index.html')
-    #     return template.render(duplicates=duplicates,
-    #                            current=current,
-    #                            total=total)
+    app = Flask(__name__)
+    CORS(app)
+    app.url_map.converters['everything'] = EverythingConverter
 
-    # with TemporaryDirectory() as folder:
-    #     # Generate all of the HTML files
-    #     chunk_size = 25
-    #     for i, dups in enumerate(chunked(duplicates, chunk_size)):
-    #         with open('{}/{}.html'.format(folder, i), 'w') as f:
-    #             f.write(render(dups,
-    #                            current=i,
-    #                            total=math.ceil(len(duplicates) / chunk_size)))
+    def render(duplicates, current, total):
+        env = Environment(loader=FileSystemLoader('template'))
+        template = env.get_template('index.html')
+        return template.render(duplicates=duplicates,
+                               current=current,
+                               total=total)
 
-    #     webbrowser.open("file://{}/{}".format(folder, '0.html'))
+    with TemporaryDirectory() as folder:
+        # Generate all of the HTML files
+        chunk_size = 25
+        for i, dups in enumerate(chunked(duplicates, chunk_size)):
+            with open('{}/{}.html'.format(folder, i), 'w') as f:
+                f.write(render(dups,
+                               current=i,
+                               total=math.ceil(len(duplicates) / chunk_size)))
 
-    #     @app.route('/picture/<everything:file_name>', methods=['DELETE'])
-    #     def delete_picture_(file_name, trash=trash):
-    #         return str(delete_picture(file_name, db, trash))
+        webbrowser.open("file://{}/{}".format(folder, '0.html'))
 
-    #     app.run()
+        @app.route('/picture/<everything:file_name>', methods=['DELETE'])
+        def delete_picture_(file_name, trash=trash):
+            return str(delete_picture(file_name, cursor, trash))
+            # print(file_name)
+            pass
+
+        app.run()
 
 
 def cleanup_db(db):
@@ -439,7 +487,7 @@ def cleanup_db(db):
 
 
 def connect_to_db(db_conn_string: str) -> sqlite3.Connection:
-    connect = sqlite3.connect(db_conn_string)
+    connect = sqlite3.connect(db_conn_string, check_same_thread=False)
     return connect
 
 
@@ -472,29 +520,19 @@ def simple_diff(i, j):
 
 
 if __name__ == '__main__':
-    # pprint(hash_file("/Users/amitseal/pics/test/2020-05-01.jpg"))
-    # from docopt import docopt
-
-    # args = docopt(__doc__)
 
     parser = argparse.ArgumentParser(description='duplicate image finder')
-
-    # parser.add_argument('integers', metavar='N', type=int, nargs='+',
-    #                 help='an integer for the accumulator')
-    # parser.add_argument('--sum', dest='accumulate', action='store_const',
-    #                 const=sum, default=max,
-    #                 help='sum the integers (default: find the max)')
 
     parser.add_argument('--add')
     # parser.add_argument('remove')
     # parser.add_argument('clear')
-    # parser.add_argument('show')
+    parser.add_argument('show')
     # parser.add_argument('find')
     # parser.add_argument('--delete')
     # parser.add_argument('--print')
     parser.add_argument('--db')
     parser.add_argument('--parallel')
-    # parser.add_argument('cleanup')
+    parser.add_argument('cleanup')
     # parser.add_argument('--match_time')
     args = parser.parse_args()
 
@@ -509,24 +547,27 @@ if __name__ == '__main__':
         DB_PATH = args.db
     else:
         DB_PATH = "./duplicate.sqlite"
-    cursor = connect_to_db(DB_PATH).cursor()
+    cursor: sqlite3.Cursor = connect_to_db(DB_PATH).cursor()
     create_table(cursor)
-    # _in_database('/Users/amitseal/pics/test/2020-05-01.jpg', connect)
+
     if args.parallel:
         NUM_PROCESSES = int(args.parallel)
     else:
         NUM_PROCESSES = None
+    # find_exact_duplicate_image_hashes(cursor)
 
     if args.add:
         add([args.add], cursor, num_processes=NUM_PROCESSES)
-    # add(["/Users/amitseal/pics/test/"], cursor)
-    find_exact_duplicate_image_hashes(cursor)
-    all_images: List[ImageHolder] = list_all_images(cursor)
-    # print(all_images)
-    groups = find_groups(all_images, simple_diff, 10)
-    print_duplicates(all_images, groups)
-    # print(groups)
-    cursor.connection.close()
+    elif args.show:
+        all_images: List[ImageHolder] = list_all_images(cursor)
+        duplicate_group_indices = find_duplicate_groups_indices(
+            all_images, simple_diff, 10)
+        duplicates = package_duplicates(all_images, duplicate_group_indices)
+        display_duplicates(duplicates, cursor)
+        cursor.connection.close()
+    elif args.cleanup:
+        pass
+    # display_duplicates()
     # print(type(imagehash_diff('f2c34972aace9670', 'eee4853a6087f686')))
     # if args.parallel:
     #     NUM_PROCESSES = int(args.parallel)
