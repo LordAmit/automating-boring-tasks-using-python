@@ -1,19 +1,16 @@
 import concurrent.futures
 import argparse
-from concurrent.futures import thread
+# from concurrent.futures import thread
 import shutil
 import os
 from typing import Dict, List
-from venv import create
+# from venv import create
 from flask import Flask
 from flask_cors import CORS
 import magic
 from termcolor import cprint
 from tempfile import TemporaryDirectory
-from pprint import pprint
 import imagehash
-import argparse
-import json
 from PIL import Image, ExifTags
 import sqlite3
 from jinja2 import FileSystemLoader, Environment
@@ -28,15 +25,6 @@ import math
 # 2) original does not work / can not make it work
 # 3) don't want mongo
 # 4) just so
-
-# data = {}
-# file, hashes, file_size, image_size, capture_time
-# cols = ["file",
-#         "hashes",
-#         "file_size",
-#         "image_size",
-#         "capture_time"]
-
 
 class ImageHolder:
     def __init__(self,
@@ -153,21 +141,6 @@ def hash_files_parallel(files, num_processes=None):
             if result is not None:
                 yield result
 
-
-def _add_to_database(file_, hash_, file_size, image_size, capture_time, db):
-    #
-    # TODO
-    # try:
-    #     db.insert_one({"_id": file_,
-    #                    "hash": hash_,
-    #                    "file_size": file_size,
-    #                    "image_size": image_size,
-    #                    "capture_time": capture_time})
-    # except pymongo.errors.DuplicateKeyError:
-    #     cprint("Duplicate key: {}".format(file_), "red")
-    pass
-
-
 def _in_database(file: str, connect: sqlite3.Cursor):
     sql = '''
     select id from images
@@ -243,28 +216,17 @@ def add(paths, cursor: sqlite3.Cursor, num_processes=None):
         cursor.connection.commit()
 
 
-def remove(paths, db):
-    for path in paths:
-        files = get_image_files(path)
+# def remove(paths, db):
+#     for path in paths:
+#         files = get_image_files(path)
 
-        # TODO: Can I do a bulk delete?
-        # TODO
-        # for file in files:
-        #     remove_image(file, db)
+#         # for file in files:
+#         #     remove_image(file, db)
 
 
 def remove_image(file, cursor: sqlite3.Cursor):
-    query = '''
-    Delete from Images
-    where id = "{}";
-    '''
-    query = query.format(file)
-    cprint(query, "red")
-    cursor.execute(query)
+    cursor.execute("DELETE from IMAGES where id=?", (file,))
     cursor.connection.commit()
-    # TODO
-    # db.delete_one({'_id': file})
-    # pass
 
 
 def clear(db):
@@ -273,27 +235,13 @@ def clear(db):
     pass
 
 
-def show(db):
-    # TODO
-    # total = db.count()
-    # pprint(list(db.find()))
-    # print("Total: {}".format(total))
-    pass
-
-
-def same_time(dup):
-    # TODO
-    pass
-    # items = dup['items']
-    # if "Time unknown" in items:
-    #     # Since we can't know for sure, better safe than sorry
-    #     return True
-
-    # if len(set([i['capture_time'] for i in items])) > 1:
-    #     return False
-
-    # return True
-
+def show(cursor: sqlite3.Cursor):
+    cprint("showing duplicates", "blue")
+    all_images: List[ImageHolder] = list_all_images(cursor)
+    duplicate_group_indices = find_duplicate_groups_indices(
+        all_images, simple_diff, 10)
+    duplicates = package_duplicates(all_images, duplicate_group_indices)
+    display_duplicates(duplicates, cursor)
 
 def find_duplicate_groups_indices(entities: List, diff_method,
                                   threshold: int = 4) -> List:
@@ -346,19 +294,7 @@ def print_duplicates(entities: List[ImageHolder], groups: List):
 
 def package_duplicates(entities: List[ImageHolder], groups: List):
     duplicate_groups: List = []
-    # {% for dup in duplicates %}
-    # <div class="row" style="margin: 15px; margin-bottom: 30px;">
-    #     {% set names = dup['items'] %}
-    # <img class="img-responsive" src="{{ img['file_name'] }}" alt="{{ img['file_name'] }}">
-    # <div class="caption">
-    #     <h5 class="name">{{ img['file_name'] }}</h5>
-    #     <div class="file-size">{{ img['file_size'] | filesizeformat }}</div>
-    #     <div class="resolution">{{ img['image_size'] }}</div>
-    #     <div class="capture-time">{{ img['capture_time'] }}</div>
-    #     <button class="btn btn-danger delete-btn" role="button" data-name="{{ img['file_name'] }}" style="margin-top: 15px">
-
     cprint("packaging duplicates now")
-
     for i in range(0, len(groups)):
         current_duplicate_group: Dict = {}
 
@@ -416,9 +352,7 @@ def delete_picture(file_name, cursor: sqlite3.Cursor, trash="./Trash/"):
     try:
 
         shutil.move(file_name, trash + os.path.basename(file_name))
-        cprint("shutil works", "red")
         remove_image(file_name, cursor)
-        cprint("remove_image works", "red")
     except FileNotFoundError:
         cprint("File not found {}".format(file_name), 'red')
         return False
@@ -437,8 +371,6 @@ def delete_duplicates(duplicates, db):
 
 
 def display_duplicates(duplicates, cursor: sqlite3.Cursor, trash="./Trash/"):
-    # TODO
-    pass
     from werkzeug.routing import PathConverter
 
     class EverythingConverter(PathConverter):
@@ -475,15 +407,14 @@ def display_duplicates(duplicates, cursor: sqlite3.Cursor, trash="./Trash/"):
         app.run()
 
 
-def cleanup_db(db):
-    # TODO
-    pass
-    # images = list(db.find())
-    # for image in images:
-    #     image_path: str = image['_id']
-    #     if not os.path.exists(image_path):
-    #         print("removing: " + str(image['_id']))
-    #         remove_image(image_path, db)
+def cleanup_db(all_images: List[ImageHolder], cursor: sqlite3.Cursor):
+    count = 0
+    for image in all_images:
+        if not os.path.exists(image.file_path):
+            print("removing: " + str(image.file_path))
+            remove_image(image.file_path, cursor)
+            count += 1
+    cprint("finished cleanup! removed {} images".format(str(count)), "blue")
 
 
 def connect_to_db(db_conn_string: str) -> sqlite3.Connection:
@@ -526,15 +457,18 @@ if __name__ == '__main__':
     parser.add_argument('--add')
     # parser.add_argument('remove')
     # parser.add_argument('clear')
-    parser.add_argument('show')
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument('--show', action='store_true')
+    group.add_argument('--cleanup', action='store_true')
+
     # parser.add_argument('find')
     # parser.add_argument('--delete')
     # parser.add_argument('--print')
     parser.add_argument('--db')
     parser.add_argument('--parallel')
-    parser.add_argument('cleanup')
     # parser.add_argument('--match_time')
     args = parser.parse_args()
+    print(args)
 
     # print(args.accumulate(args.integers))
 
@@ -554,19 +488,18 @@ if __name__ == '__main__':
         NUM_PROCESSES = int(args.parallel)
     else:
         NUM_PROCESSES = None
-    # find_exact_duplicate_image_hashes(cursor)
 
     if args.add:
+        cprint("adding duplicates", "blue")
+        exit()
         add([args.add], cursor, num_processes=NUM_PROCESSES)
     elif args.show:
-        all_images: List[ImageHolder] = list_all_images(cursor)
-        duplicate_group_indices = find_duplicate_groups_indices(
-            all_images, simple_diff, 10)
-        duplicates = package_duplicates(all_images, duplicate_group_indices)
-        display_duplicates(duplicates, cursor)
+        show(cursor)
         cursor.connection.close()
     elif args.cleanup:
-        pass
+        cprint("cleaning up database of duplicates", "blue")
+        all_images: List[ImageHolder] = list_all_images(cursor)
+        cleanup_db(all_images, cursor)
     # display_duplicates()
     # print(type(imagehash_diff('f2c34972aace9670', 'eee4853a6087f686')))
     # if args.parallel:
