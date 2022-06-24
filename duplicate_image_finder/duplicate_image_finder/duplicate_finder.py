@@ -280,31 +280,16 @@ def same_time(dup):
     # return True
 
 
-def find_groups(entities: List, diff_method, threshold: int = 4) -> List:
+def find_groups(entities: List, diff_method,
+                threshold: int = 4) -> List:
     groups: List = []
     if len(entities) <= 1:
         return []
-    print(str(entities))
+    # print(str(entities))
     m = 0
     n = m + 1
     flag = False
     for i in range(0, len(entities)):
-        # print(m, n)
-        # if diff > threshold and m != (n-1):
-        #     print("adding in general: ", m, n-1)
-        #     groups.append((m, n-1))
-        #     m = n
-        # n += 1
-        # if n >= len(entities):
-        #     if m != n-1:
-        #         last_group_diff: int = abs(
-        #             diff_method(entities[m], entities[n-1]))
-        #         if last_group_diff <= threshold:
-        #             print("adding last group diff: ", m, n-1)
-        #             groups.append((m, n-1))
-        #     break
-
-        print(str(groups))
         if n >= len(entities):
             print("triggered last group condition")
             if m != n-1:
@@ -314,28 +299,43 @@ def find_groups(entities: List, diff_method, threshold: int = 4) -> List:
                     print("adding last group diff: ", m, n-1)
                     groups.append((m, n-1))
             break
-        print(
-            "flag = {}, m = {}, entities[m] = {}, n = {}, entites[n] = {}".format(
-                str(flag),
-                str(m),
-                str(n),
-                str(entities[m]),
-                str(entities[n])))
+        # print(
+        #     "flag = {}, m = {}, entities[m] = {}, n = {}, entites[n] = {}".format(
+        #         str(flag),
+        #         str(m),
+        #         str(n),
+        #         str(entities[m]),
+        #         str(entities[n])))
         if (
             (diff_method(entities[m], entities[n]) <= threshold)
                 and (n < len(entities))):
             flag = True
             n = n+1
-            # continue
         else:
             if (flag):
                 groups.append((m, n-1))
                 flag = False
             m = n
             n = n + 1
-            # continue
-
     return groups
+
+# def package_duplicates(entities: List[ImageHolder], groups: List):
+#     duplicates = {}
+#     for i in range(0, len(groups)):
+#         start, end = groups[i]
+#         for j in range(start, end + 1):
+#             duplicates['id'] = i
+#             duplicates["items"] = entities[start:end]
+
+
+def print_duplicates(entities: List[ImageHolder], groups: List):
+    cprint("printing duplicates now")
+    for i in range(0, len(groups)):
+        start, end = groups[i]
+        cprint("group "+str(i), "blue")
+        for j in range(start, end+1):
+            cprint(entities[j], "yellow")
+
 
 
 def find(db, match_time=False):
@@ -391,9 +391,9 @@ def delete_duplicates(duplicates, db):
                                         len(results)), 'yellow')
 
 
-def display_duplicates(duplicates, db, trash="./Trash/"):
-    # TODO
-    pass
+# def display_duplicates(duplicates, db, trash="./Trash/"):
+#     # TODO
+#     pass
     # from werkzeug.routing import PathConverter
     # class EverythingConverter(PathConverter):
     #     regex = '.*?'
@@ -485,7 +485,7 @@ if __name__ == '__main__':
     #                 const=sum, default=max,
     #                 help='sum the integers (default: find the max)')
 
-    # parser.add_argument('add')
+    parser.add_argument('--add')
     # parser.add_argument('remove')
     # parser.add_argument('clear')
     # parser.add_argument('show')
@@ -493,7 +493,7 @@ if __name__ == '__main__':
     # parser.add_argument('--delete')
     # parser.add_argument('--print')
     parser.add_argument('--db')
-    # parser.add_argument('--parallel')
+    parser.add_argument('--parallel')
     # parser.add_argument('cleanup')
     # parser.add_argument('--match_time')
     args = parser.parse_args()
@@ -512,12 +512,20 @@ if __name__ == '__main__':
     cursor = connect_to_db(DB_PATH).cursor()
     create_table(cursor)
     # _in_database('/Users/amitseal/pics/test/2020-05-01.jpg', connect)
-    add(["/Users/amitseal/pics/test/"], cursor)
+    if args.parallel:
+        NUM_PROCESSES = int(args.parallel)
+    else:
+        NUM_PROCESSES = None
+
+    if args.add:
+        add([args.add], cursor, num_processes=NUM_PROCESSES)
+    # add(["/Users/amitseal/pics/test/"], cursor)
     find_exact_duplicate_image_hashes(cursor)
     all_images: List[ImageHolder] = list_all_images(cursor)
-    print(all_images)
+    # print(all_images)
     groups = find_groups(all_images, simple_diff, 10)
-    print(groups)
+    print_duplicates(all_images, groups)
+    # print(groups)
     cursor.connection.close()
     # print(type(imagehash_diff('f2c34972aace9670', 'eee4853a6087f686')))
     # if args.parallel:
