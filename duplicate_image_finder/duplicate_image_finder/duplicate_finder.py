@@ -1,10 +1,8 @@
 import concurrent.futures
 import argparse
-# from concurrent.futures import thread
 import shutil
 import os
 from typing import Dict, List
-# from venv import create
 from flask import Flask
 from flask_cors import CORS
 import magic
@@ -42,9 +40,6 @@ class ImageHolder:
             self.image_size, self.capture_time)
 
     def __repr__(self):
-        # return "\n({}, {}, {}, {}, {})".format(
-        #     self.file_path, self.hashes, self.file_size,
-        #     self.image_size, self.capture_time)
         return "\n"+str(self)
 
     def __sub__(self, other) -> int:
@@ -141,6 +136,7 @@ def hash_files_parallel(files, num_processes=None):
             if result is not None:
                 yield result
 
+
 def _in_database(file: str, connect: sqlite3.Cursor):
     sql = '''
     select id from images
@@ -229,10 +225,10 @@ def remove_image(file, cursor: sqlite3.Cursor):
     cursor.connection.commit()
 
 
-def clear(db):
-    # db.drop()
-    # TODO
-    pass
+# def clear(db):
+#     # db.drop()
+#     # TODO
+#     pass
 
 
 def show(cursor: sqlite3.Cursor):
@@ -243,32 +239,25 @@ def show(cursor: sqlite3.Cursor):
     duplicates = package_duplicates(all_images, duplicate_group_indices)
     display_duplicates(duplicates, cursor)
 
+
 def find_duplicate_groups_indices(entities: List, diff_method,
                                   threshold: int = 4) -> List:
     groups: List = []
     if len(entities) <= 1:
         return []
-    # print(str(entities))
     m = 0
     n = m + 1
     flag = False
     for i in range(0, len(entities)):
         if n >= len(entities):
-            print("triggered last group condition")
+            # print("triggered last group condition")
             if m != n-1:
                 last_group_diff: int = diff_method(
                     entities[m], entities[n-1])
                 if last_group_diff <= threshold:
-                    print("adding last group diff: ", m, n-1)
+                    # print("adding last group diff: ", m, n-1)
                     groups.append((m, n-1))
             break
-        # print(
-        #     "flag = {}, m = {}, entities[m] = {}, n = {}, entites[n] = {}".format(
-        #         str(flag),
-        #         str(m),
-        #         str(n),
-        #         str(entities[m]),
-        #         str(entities[n])))
         if (
             (diff_method(entities[m], entities[n]) <= threshold)
                 and (n < len(entities))):
@@ -314,36 +303,6 @@ def package_duplicates(entities: List[ImageHolder], groups: List):
             })
         duplicate_groups.append(current_duplicate_group)
     return duplicate_groups
-
-
-def find(db, match_time=False):
-    # TODO
-    pass
-    # dups = db.aggregate([{
-    #     "$group": {
-    #         "_id": "$hash",
-    #         "total": {"$sum": 1},
-    #         "items": {
-    #             "$push": {
-    #                 "file_name": "$_id",
-    #                 "file_size": "$file_size",
-    #                 "image_size": "$image_size",
-    #                 "capture_time": "$capture_time"
-    #             }
-    #         }
-    #     }
-    # },
-    #     {
-    #         "$match": {
-    #             "total": {"$gt": 1}
-    #         }
-    #     }])
-
-    # if match_time:
-    #     dups = (d for d in dups if same_time(d))
-
-    # return list(dups)
-
 
 def delete_picture(file_name, cursor: sqlite3.Cursor, trash="./Trash/"):
     cprint("Moving {} to {}".format(file_name, trash), 'yellow')
@@ -455,27 +414,14 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='duplicate image finder')
 
     parser.add_argument('--add')
-    # parser.add_argument('remove')
-    # parser.add_argument('clear')
+
     group = parser.add_mutually_exclusive_group()
     group.add_argument('--show', action='store_true')
     group.add_argument('--cleanup', action='store_true')
-
-    # parser.add_argument('find')
-    # parser.add_argument('--delete')
-    # parser.add_argument('--print')
     parser.add_argument('--db')
     parser.add_argument('--parallel')
-    # parser.add_argument('--match_time')
     args = parser.parse_args()
     print(args)
-
-    # print(args.accumulate(args.integers))
-
-    # if args['--trash']:
-    #     TRASH = args['--trash']
-    # else:
-    #     TRASH = "./Trash/"
 
     if args.db:
         DB_PATH = args.db
@@ -491,7 +437,6 @@ if __name__ == '__main__':
 
     if args.add:
         cprint("adding duplicates", "blue")
-        exit()
         add([args.add], cursor, num_processes=NUM_PROCESSES)
     elif args.show:
         show(cursor)
@@ -500,33 +445,3 @@ if __name__ == '__main__':
         cprint("cleaning up database of duplicates", "blue")
         all_images: List[ImageHolder] = list_all_images(cursor)
         cleanup_db(all_images, cursor)
-    # display_duplicates()
-    # print(type(imagehash_diff('f2c34972aace9670', 'eee4853a6087f686')))
-    # if args.parallel:
-    #     NUM_PROCESSES = int(args.parallel)
-    # else:
-    #     NUM_PROCESSES = 0
-
-    # with connect_to_db(db_conn_string=DB_PATH) as db:
-    # if args.add:
-    #     # add(args['<path>'], db, NUM_PROCESSES)
-    #     pass
-    # elif args.remove:
-    #     # remove(args['<path>'], db)
-    #     pass
-    # elif args.clear:
-    #     clear(db)
-    # elif args.show:
-    #     show(db)
-    # elif args.find:
-    #     dups = find(db, args.match_time)
-
-    #     if args.delete:
-    #         delete_duplicates(dups, db)
-    #     elif args.print:
-    #         pprint(dups)
-    #         print("Number of duplicates: {}".format(len(dups)))
-    #     else:
-    #         display_duplicates(dups, db=db)
-    # elif args.cleanup:
-    #     cleanup_db(db)
