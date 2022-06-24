@@ -1,5 +1,6 @@
 import concurrent.futures
 import argparse
+from concurrent.futures import thread
 import re
 import shutil
 import os
@@ -28,6 +29,35 @@ import sqlite3
 #         "file_size",
 #         "image_size",
 #         "capture_time"]
+
+
+class ImageHolder:
+    def __init__(self,
+                 file_path: str, hashes: str, file_size: str, image_size: str,
+                 capture_time: str) -> None:
+        self.file_path = file_path
+        self.hashes = hashes
+        self.file_size = file_size
+        self.image_size = image_size
+        self.capture_time = capture_time
+
+    def __str__(self) -> str:
+        return "{}, {}, {}, {}, {}".format(
+            self.file_path, self.hashes, self.file_size,
+            self.image_size, self.capture_time)
+
+    def __repr__(self):
+        # return "\n({}, {}, {}, {}, {})".format(
+        #     self.file_path, self.hashes, self.file_size,
+        #     self.image_size, self.capture_time)
+        return "\n"+str(self)
+
+    def __sub__(self, other) -> int:
+        if other is None:
+            raise TypeError('Other hash must not be None.')
+        return abs(
+            imagehash.hex_to_hash(self.hashes) -
+            imagehash.hex_to_hash(other.hashes))
 
 
 def _get_file_size(file_name):
@@ -152,19 +182,26 @@ def prepare_results(file_, hash_, file_size, image_size, capture_time):
     pass
 
 
-def list_all(cursor: sqlite3.Cursor):
+def list_all_images(cursor: sqlite3.Cursor) -> List[ImageHolder]:
+    image_holders: List[ImageHolder] = []
     query = '''
-    select hashes, id from images
+    select id, hashes, file_size, image_size, image_date from images
     order by hashes desc
     ;'''
     cursor.execute(query)
     hashes: List = cursor.fetchall()
     for hash in hashes:
-        print(hash)
+        image_holders.append(
+            ImageHolder(
+                hash[0],
+                hash[1],
+                hash[2],
+                hash[3],
+                hash[4]))
+    return image_holders
 
 
 def find_exact_duplicate_image_hashes(cursor: sqlite3.Cursor):
-
     query = '''
     select hashes
     from images
@@ -243,26 +280,61 @@ def same_time(dup):
     # return True
 
 
-def find_groups(hashes: List, threshold: int = 4) -> List:
+def find_groups(entities: List, diff_method, threshold: int = 4) -> List:
     groups: List = []
-    if len(hashes) <= 1:
+    if len(entities) <= 1:
         return []
-    print(str(hashes))
+    print(str(entities))
     m = 0
-    n = 1
-    for i in range(0, len(hashes)):
-        print(m, n, len(hashes))
-        diff: int = abs(hashes[m] - hashes[n])
-        if diff > threshold:
-            groups.append((m, n-1))
-            m = n
-        n += 1
-        if n >= len(hashes):
+    n = m + 1
+    flag = False
+    for i in range(0, len(entities)):
+        # print(m, n)
+        # if diff > threshold and m != (n-1):
+        #     print("adding in general: ", m, n-1)
+        #     groups.append((m, n-1))
+        #     m = n
+        # n += 1
+        # if n >= len(entities):
+        #     if m != n-1:
+        #         last_group_diff: int = abs(
+        #             diff_method(entities[m], entities[n-1]))
+        #         if last_group_diff <= threshold:
+        #             print("adding last group diff: ", m, n-1)
+        #             groups.append((m, n-1))
+        #     break
+
+        print(str(groups))
+        if n >= len(entities):
+            print("triggered last group condition")
             if m != n-1:
-                last_group_diff: int = abs(hashes[m] - hashes[n-1])
+                last_group_diff: int = diff_method(
+                    entities[m], entities[n-1])
                 if last_group_diff <= threshold:
+                    print("adding last group diff: ", m, n-1)
                     groups.append((m, n-1))
             break
+        print(
+            "flag = {}, m = {}, entities[m] = {}, n = {}, entites[n] = {}".format(
+                str(flag),
+                str(m),
+                str(n),
+                str(entities[m]),
+                str(entities[n])))
+        if (
+            (diff_method(entities[m], entities[n]) <= threshold)
+                and (n < len(entities))):
+            flag = True
+            n = n+1
+            # continue
+        else:
+            if (flag):
+                groups.append((m, n-1))
+                flag = False
+            m = n
+            n = n + 1
+            # continue
+
     return groups
 
 
@@ -395,6 +467,10 @@ def create_table(cursor: sqlite3.Cursor):
         cprint("Table already exists", "red")
 
 
+def simple_diff(i, j):
+    return i-j
+
+
 if __name__ == '__main__':
     # pprint(hash_file("/Users/amitseal/pics/test/2020-05-01.jpg"))
     # from docopt import docopt
@@ -438,9 +514,12 @@ if __name__ == '__main__':
     # _in_database('/Users/amitseal/pics/test/2020-05-01.jpg', connect)
     add(["/Users/amitseal/pics/test/"], cursor)
     find_exact_duplicate_image_hashes(cursor)
-    list_all(cursor)
+    all_images: List[ImageHolder] = list_all_images(cursor)
+    print(all_images)
+    groups = find_groups(all_images, simple_diff, 10)
+    print(groups)
     cursor.connection.close()
-    print(type(imagehash_diff('f2c34972aace9670', 'eee4853a6087f686')))
+    # print(type(imagehash_diff('f2c34972aace9670', 'eee4853a6087f686')))
     # if args.parallel:
     #     NUM_PROCESSES = int(args.parallel)
     # else:
