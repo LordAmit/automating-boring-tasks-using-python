@@ -6,7 +6,6 @@ from typing import List
 import os.path as path
 import subprocess
 
-
 def compress_image(old_image_path, new_image_path):
     command = "convert -quality 95 '{old}' '{new}'".format(
         old=old_image_path,
@@ -16,8 +15,9 @@ def compress_image(old_image_path, new_image_path):
 
 
 def backup_image(old_image_path, backup_path):
-    command = "mv '{old}' {backup_path}".format(old=old_image_path,
-                                                backup_path=backup_path)
+    print("Backing up images")
+    command = "mv '{old}' '{backup_path}'".format(old=old_image_path,
+                                                  backup_path=backup_path)
     print(command)
     subprocess.check_output(shlex.split(command))
 
@@ -28,8 +28,7 @@ def backup_image(old_image_path, backup_path):
 if __name__ == '__main__':
     hard_limit = 5491520
     # 5491520 bytes = 5240 KB = 5MB
-
-
+    backup_path = argh.get_backup()
     image_paths: List = walker.walk(increasing_size_sort=True)
     new_suffix = "_comp_la"
     new_ext = '.jpg'
@@ -44,7 +43,8 @@ if __name__ == '__main__':
         new_image_path = old_image_path.replace(
             os.path.splitext(old_image_path)[1], new_suffix + new_ext)
         compress_image(old_image_path, new_image_path)
-        backup_image(old_image_path)
+        backup_image(old_image_path, backup_path)
+
         # break
         # print(image_path)
         # image_1, image_2 = os.path.split(image_path)
