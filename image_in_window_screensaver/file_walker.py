@@ -18,6 +18,7 @@ def walk(mode=None, is_sorted: bool = False,
     """
     walks through a path to return list of absolute path of images with png or
     jpg extensions
+    :param increasing_size_sort:
     :param reverse_sort: allows sorting in reverse
     :param is_sorted: can sort based on time-date
     :param mode: can be landscape or portrait
