@@ -1,5 +1,7 @@
+from sys import argv
 from PyPDF2 import PdfFileReader, PdfFileWriter, PdfWriter
 from pip import main
+import sys
 
 def get_pages(input_pdf: PdfFileReader):
     return input_pdf.getNumPages()
@@ -21,8 +23,14 @@ def write_file(input_pdf_path: str, writer: PdfFileWriter):
         writer.write(out)
 
 def main():
-    input_pdf_path = "test.pdf"
-    template_pdf_path = "template/cornelllined.pdf"
+
+
+    if len(sys.argv) != 3:
+        print("Please specify the absolute paths to the input file and template file")
+        print("Format: add_comment_page input_pdf_path template_pdf_path ")
+        exit()
+    input_pdf_path = sys.argv[1]
+    template_pdf_path = sys.argv[2]
     write_file(input_pdf_path, add_pages(input_pdf_path, template_pdf_path))
 
 if __name__ == "__main__":
