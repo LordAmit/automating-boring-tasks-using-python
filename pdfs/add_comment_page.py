@@ -24,7 +24,7 @@ def write_file(input_pdf_path: str, writer: PdfFileWriter):
 
 def main():
 
-
+    print(sys.argv)
     if len(sys.argv) != 3:
         print("Please specify the absolute paths to the input file and template file")
         print("Format: add_comment_page input_pdf_path template_pdf_path ")
