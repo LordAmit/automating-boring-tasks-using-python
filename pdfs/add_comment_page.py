@@ -1,8 +1,6 @@
 from sys import argv
 from PyPDF2 import PdfMerger, PdfFileReader
-from pip import main
 import sys
-
 
 def add_pages(input_pdf_path: str, template_pdf_path: str):
     input_pdf = open(input_pdf_path, "rb")
