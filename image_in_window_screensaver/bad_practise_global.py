@@ -9,4 +9,6 @@ width_spacing = 0
 
 least_pause_secs = 1
 max_pause_secs = 1500
-pause_secs = 10
+pause_secs = 300
+
+autoplay = True

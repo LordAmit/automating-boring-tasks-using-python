@@ -31,7 +31,8 @@ class ImageWidget(QWidget):
         self._shuffle_start_index = 0
         self._current_index = 0
         self.is_full_screen: bool = False
-        self.is_playing: bool = False
+        # self.is_playing: bool = False
+        self.is_playing: bool = bpg.autoplay
         self._seed = time.time()
 
         # timer
@@ -59,7 +60,7 @@ class ImageWidget(QWidget):
             self._current_index = self.get_index_from_image_path(
                 current_image_path)
             self._shuffle_start_index = self._current_index
-        # self.image_shuffle()
+        self.image_shuffle()
         self._set_image(self._current_index)
 
     def is_image_landscape(self, image: QPixmap):
@@ -244,24 +245,37 @@ class ImageWidget(QWidget):
         elif key == Qt.Key_T:
             print("T pressed")
             self.increase_timer(bpg.max_pause_secs)
-        self.pause()
+
+        if self.is_playing:
+            self.play()
+        else:
+            self.pause()
+
         self.setFocus()
         # self.set_title(self.get_current_image_path_str())
 
     def toggle_play(self):
-        l.log("toggle auto play is" + str(self.is_playing))
         self.is_playing = not self.is_playing
-        self.play()
+        l.log(
+            str.format(
+                "toggle auto play from {} to {}",
+                (str(self.is_playing)),
+                (str(not self.is_playing)))
+            )
+        if self.is_playing:
+            self.play()
+        else:
+            self.pause()
 
     def play(self):
-        l.log("starting play timer")
-        if self.is_playing:
-            self.timer.start()
+        l.log("slideshow running")
+        # self.is_playing = True
+        self.timer.start()
 
     def pause(self):
-        if not self.is_playing:
-            l.log("pausing auto play: " + str(self.is_playing))
-            self.timer.stop()
+        l.log("slideshow paused")
+        # self.is_playing = False
+        self.timer.stop()
 
     def play_image_next(self):
         if self.is_playing:
