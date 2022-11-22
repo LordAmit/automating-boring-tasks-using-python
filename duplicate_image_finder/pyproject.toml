@@ -7,7 +7,7 @@ authors = ["Amit <lordamit@gmail.com>"]
 [tool.poetry.dependencies]
 python = "^3.9"
 Flask = "^2.1.2"
-Pillow = "^9.1.1"
+Pillow = "^9.3.0"
 termcolor = "^1.1.0"
 types-termcolor = "^1.1.4"
 pandas = "^1.4.2"
