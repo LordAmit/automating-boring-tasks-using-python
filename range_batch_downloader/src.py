@@ -14,7 +14,6 @@ def setup_arguments():
 def main():
     parser = setup_arguments()
     args = parser.parse_args()
-    print(args)
     number_start = args.ns
     number_end = args.ne
     url_start = args.us
