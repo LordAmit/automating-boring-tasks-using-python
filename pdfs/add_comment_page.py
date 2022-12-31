@@ -1,6 +1,7 @@
 from sys import argv
 from PyPDF2 import PdfMerger, PdfFileReader
 import sys
+import shutil, os
 
 def add_pages(input_pdf_path: str, template_pdf_path: str):
     input_pdf = open(input_pdf_path, "rb")
@@ -17,12 +18,21 @@ def add_pages(input_pdf_path: str, template_pdf_path: str):
 
     template.close()
     input_pdf.close()
-    write_file(input_pdf_path, merger)
+    output_filepath = write_file(input_pdf_path, merger)
+    rename_file(input_pdf_path, output_filepath)
 
-def write_file(input_pdf_path: str, merger: PdfMerger):
-    with open(input_pdf_path+"merged.pdf", "wb") as out:
+def write_file(input_pdf_path: str, merger: PdfMerger)->str:
+    output_file_path = input_pdf_path+"merged.pdf"
+    with open(output_file_path, "wb") as out:
         merger.write(out)
     merger.close()
+    return output_file_path
+
+def rename_file(input_filepath, output_filepath):
+    input_filename, ext = os.path.splitext(input_filepath)
+    backup_filepath = input_filename+"_backup"+ext
+    os.rename(input_filepath, backup_filepath)
+    os.rename(output_filepath, input_filepath)
 
 def main():
 
