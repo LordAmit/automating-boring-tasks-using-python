@@ -20,7 +20,7 @@ def main():
     url_end = None
     if args.ue:
         url_end = args.ue
-    download_string = 'wget "{url_start}{current}{url_end}"'
+    download_string = ' wget "{url_start}{current}{url_end}" --user-agent="Mozilla"'
     for i in range(number_start, number_end+1):
         formatted_string = download_string.format(url_start=url_start,
                                                   current=str(i), url_end=url_end)
