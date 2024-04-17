@@ -11,4 +11,5 @@ least_pause_secs = 1
 max_pause_secs = 1500
 pause_secs = 300
 
+shuffle_from_start = True
 autoplay = True

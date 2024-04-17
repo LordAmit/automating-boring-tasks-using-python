@@ -8,7 +8,7 @@ from qtpy.QtGui import QPixmap, QMouseEvent, QKeyEvent, QDesktopServices, \
     QKeySequence
 from qtpy.QtWidgets import QWidget, QLabel, QSizePolicy, QVBoxLayout
 from send2trash import send2trash
-
+import argument_handler as argh
 import bad_practise_global as bpg
 import custom_log as l
 import file_walker
@@ -48,6 +48,19 @@ class ImageWidget(QWidget):
         self._layout.addWidget(self._image_label)
         self.setLayout(self._layout)
         self.initialize_images()
+        if bpg.shuffle_from_start:
+            self.image_shuffle()
+        self._set_start_image()
+
+    def _set_start_image(self):
+        self.start_image = argh.get_start_image_path()
+        if self.start_image:
+            l.log("setting start image: "+self.start_image)
+            index = self.get_index_from_image_path(
+                    self.start_image)
+            self._set_image(index)
+            self._current_index = index
+
 
     def initialize_images(self, mode=None, current_image_path=None,
                           to_sort: bool = False,
@@ -60,7 +73,6 @@ class ImageWidget(QWidget):
             self._current_index = self.get_index_from_image_path(
                 current_image_path)
             self._shuffle_start_index = self._current_index
-        self.image_shuffle()
         self._set_image(self._current_index)
 
     def is_image_landscape(self, image: QPixmap):
@@ -73,7 +85,12 @@ class ImageWidget(QWidget):
         # for i in range(0, len(self._all_images)):
         #     if self._all_images[i] is image_path:
         #         return i
-        return self._all_images.index(image_path)
+
+        try:
+            return self._all_images.index(image_path)
+        except ValueError:
+            l.log("requested image {} not found. returning 0.".format(image_path))
+            return 0
 
     def image_shuffle(self):
         l.log("shuffle")
@@ -89,7 +106,7 @@ class ImageWidget(QWidget):
         # self._set_image(self._current_index)
 
     def reverse_sort(self):
-        l.log("reverse sort")
+        l.log("reversing current sort")
         print(self._current_index)
         current_image_path = self._all_images[self._current_index]
         self._all_images.reverse()
@@ -97,7 +114,7 @@ class ImageWidget(QWidget):
 
 
     def sort_by_date(self, reverse_sort: bool = False):
-        l.log("sorting images")
+        l.log("sorting images by date")
         print(self._current_index)
         current_image_path = self._all_images[self._current_index]
         self.initialize_images(mode=file_walker.get_mode(),
@@ -201,10 +218,14 @@ class ImageWidget(QWidget):
             self._shuffle_start_index = self._current_index
         elif key == Qt.Key_1:
             l.log("Key 1 --> landscape mode")
-            self.initialize_images("landscape/")
+            self.initialize_images("landscape/", current_image_path=self.start_image)
+            if bpg.shuffle_from_start:
+                self.image_shuffle()
         elif key == Qt.Key_2:
             l.log("Key 2 --> Portrait mode")
-            self.initialize_images("portrait/")
+            self.initialize_images("portrait/", current_image_path=self.start_image)
+            if bpg.shuffle_from_start:
+                self.image_shuffle()
         elif key == Qt.Key_0:
             l.log("Key 0 --> go to index 0")
             if self._shuffle_start_index != 0:
