@@ -1,0 +1,309 @@
+<HTML>
+<HEAD>
+<title>Security Engineering - A Guide to Building
+Dependable Distributed Systems</title>
+<meta name=viewport content="width=device-width, initial-scale=1">
+</HEAD><BODY  BGCOLOR="#FFFFFF">
+
+<HR>
+<CENTER>
+<br>
+<H1>Security Engineering &mdash; Third Edition</H1>
+</CENTER>
+
+<CENTER>
+<br>
+<A HREF="http://www.cl.cam.ac.uk/~rja14/Papers/SEv3-cover.jpg"><IMG SRC="http://www.cl.cam.ac.uk/~rja14/Papers/SEv3-coversmall.jpg" border="0" alt="cover\
+" hspace="3" vspace="3"></A>
+</CENTER>
+I'm writing a third edition of Security Engineering, and hope to have it 
+finished in time to be in bookstores for Academic Year 2020-1. 
+
+<P>
+With both the first edition in 2001 and the second edition in 2008, I
+put six chapters online for free at once, then added the others four
+years after publication.
+For the third edition, I've negotiated an agreement with the publisher
+to put the chapters online for review as I write them. So the book
+will come out by instalments, like Dickens' novels. Once the
+manuscript's finished and goes to press, all except seven sample
+chapters will disappear for a commercial period of 42 months. I'm
+afraid the publishers insist on that. But therearefter the whole book
+will be free online forever.
+
+<P>
+Here are the chapters I've put online for review so far:
+
+<P><UL>
+<TYPE=1><START=1>
+<LI><a href="Papers/SEv3-pref-May16.pdf">Preface</a></LI>
+<LI><a href="Papers/SEv3-ch1-3aug.pdf">Chapter 1: What is Security Engineering?</a></LI>
+<LI><a href="Papers/SEv3-ch2-3aug.pdf">Chapter 2: Who is the Opponent?</a></LI>
+<LI><a href="Papers/SEv3-ch3-3aug.pdf">Chapter 3: Psychology and Usability</a></LI>
+<LI><a href="Papers/SEv3-ch4-3aug.pdf">Chapter 4: Protocols</a></LI>
+<LI><a href="Papers/SEv3-ch5-dec18.pdf">Chapter 5: Cryptography</a></LI>
+<LI><a href="Papers/SEv3-ch6-3aug.pdf">Chapter 6: Access Control</a></LI>
+<LI><a href="Papers/SEv3-ch7-3aug.pdf">Chapter 7: Distributed Systems</a></LI>
+<LI><a href="Papers/SEv3-ch8-dec18.pdf">Chapter 8: Economics</a></LI>
+<LI><a href="Papers/SEv3-ch9-3aug.pdf">Chapter 9: Multilevel Security</a></LI>
+<LI><a href="Papers/SEv3-ch10-3aug.pdf">Chapter 10: Boundaries</a></LI>
+<LI><a href="Papers/SEv3-ch11-3aug.pdf">Chapter 11: Inference Control</a></LI>
+<LI><a href="Papers/SEv3-ch12-3aug.pdf">Chapter 12: Banking and Bookkeeping</a></LI>
+<LI><a href="Papers/SEv3-ch13-3aug.pdf">Chapter 13: Physical Protection</a></LI>
+<LI><a href="Papers/SEv3-ch14-3aug.pdf">Chapter 14: Monitoring and Metering</a></LI>
+<LI><a href="Papers/SEv3-ch15-3aug.pdf">Chapter 15: Nuclear Command and Control</a></LI>
+<LI><a href="Papers/SEv3-ch16-3aug.pdf">Chapter 16: Security Printing and Seals</a></LI>
+<LI><a href="Papers/SEv3-ch17-3aug.pdf">Chapter 17: Biometrics</a></LI>
+<LI><a href="Papers/SEv3-ch18-3aug.pdf">Chapter 18: Physical Tamper Resistance</a></LI>
+<LI><a href="Papers/SEv3-ch19-3aug.pdf">Chapter 19: Side Channels</a></LI>
+<LI><a href="Papers/SEv3-ch20-mar17.pdf">Chapter 20: Advanced Cryptographic Engineering</a></LI>
+<LI><a href="Papers/SEv3-ch21-mar17.pdf">Chapter 21: Network Attack and Defence</a></LI>
+<LI><a href="Papers/SEv3-ch22-jul10.pdf">Chapter 22: Phones</a></LI>
+<LI><a href="Papers/SEv3-ch23-jun5.pdf">Chapter 23: Electronic and Information Warfare</a></LI>
+<LI><IMG SRC="https://www.cl.cam.ac.uk/~rja14/new.gif"><a href="Papers/SEv3-ch24-3aug.pdf">Chapter 24: Copyright and DRM</a> (3 Aug)</a></LI>
+<LI><a href="Papers/SEv3-ch26-3aug.pdf">Chapter 26: Surveillance or Privacy?</a></LI>
+<LI><a href="Papers/SEv3-ch27-3aug.pdf">Chapter 27: Secure Systems Development</a></LI>
+<LI><a href="Papers/SEv3-ch28-3aug.pdf">Chapter 28: Assurance and Sustainability</a></LI> 
+<LI><a href="Papers/SEv3-bib-jul24.pdf">Bibliography</a></LI>
+</UL>
+<P>
+
+If you see anything wrong or missing, or you think some aspect of any
+chapter topic isn't covered adequately, please email me at Ross dot
+Anderson at cl dot cam dot ac dot uk.
+
+<P>
+
+This approach was inspired by the collaborative authorship model
+pioneered by my late friend and colleague David MacKay for his great
+books on <a href="https://withouthotair.com/">sustainable energy</a>
+and <a href="http://www.inference.org.uk/mackay/itila/book.html">coding
+theory</a>. 
+
+<P>
+I made a video for the launch, which you can watch <a
+href="https://www.youtube.com/watch?v=Q--8SidkBII&feature=youtu.be">here</a>.
+For comments, see our blog <a href="https://www.lightbluetouchpaper.org/2019/05/17/security-engineering-third-edition/">here</a>, Bruce Schneier's blog <a
+href="https://www.schneier.com/blog/archives/2019/05/why_are_cryptog.html">here</a> and El Pais <a href="https://elpais.com/tecnologia/2019/05/23/actualidad/1558614194_769812.html?id_externo_rsoc=TW_CC">here</a>.
+<hr>
+<P><strong>The Second Edition (2008)</strong>
+
+<P>
+<CENTER>
+<br>
+<A HREF="http://www.cl.cam.ac.uk/~rja14/Papers/book2coverlarge.jpg"><IMG SRC="http://www.cl.cam.ac.uk/~rja14/Papers/book2coversmall.jpg" border="0" alt="cover" hspace="3" vspace="3"></A>
+</CENTER>
+
+
+<P>
+Download for free here:
+
+<P><UL>
+<TYPE=1><START=1>
+<LI><a href="Papers/SEv2-toc.pdf">Table of contents</a></LI>
+<LI><a href="Papers/SEv2-pref.pdf">Preface</a></LI>
+<LI><a href="Papers/SEv2-acks.pdf">Acknowledgements</a></LI>
+<LI><a href="Papers/SEv2-c01.pdf">Chapter 1: What is Security Engineering?</a></LI>
+<LI><a href="Papers/SEv2-c02.pdf">Chapter 2: Usability and Psychology</a></LI>
+<LI><a href="Papers/SEv2-c03.pdf">Chapter 3: Protocols</a></LI>
+<LI><a href="Papers/SEv2-c04.pdf">Chapter 4: Access Control</a></LI>
+<LI><a href="Papers/SEv2-c05.pdf">Chapter 5: Cryptography</a></LI>
+<LI><a href="Papers/SEv2-c06.pdf">Chapter 6: Distributed Systems</a></LI>
+<LI><a href="Papers/SEv2-c07.pdf">Chapter 7: Economics</a></LI>
+<LI><a href="Papers/SEv2-c08.pdf">Chapter 8: Multilevel Security</a></LI>
+<LI><a href="Papers/SEv2-c09.pdf">Chapter 9: Multilateral Security</a></LI>
+<LI><a href="Papers/SEv2-c10.pdf">Chapter 10: Banking and Bookkeeping</a></LI>
+<LI><a href="Papers/SEv2-c11.pdf">Chapter 11: Physical Protection</a></LI>
+<LI><a href="Papers/SEv2-c12.pdf">Chapter 12: Monitoring and Metering</a></LI>
+<LI><a href="Papers/SEv2-c13.pdf">Chapter 13: Nuclear Command and Control</a></LI>
+<LI><a href="Papers/SEv2-c14.pdf">Chapter 14: Security Printing and Seals</a></LI>
+<LI><a href="Papers/SEv2-c15.pdf">Chapter 15: Biometrics</a></LI>
+<LI><a href="Papers/SEv2-c16.pdf">Chapter 16: Physical Tamper Resistance</a></LI>
+<LI><a href="Papers/SEv2-c17.pdf">Chapter 17: Emission Security</a></LI>
+<LI><a href="Papers/SEv2-c18.pdf">Chapter 18: API Security</a></LI>
+<LI><a href="Papers/SEv2-c19.pdf">Chapter 19: Electronic and Information Warfare</a></LI>
+<LI><a href="Papers/SEv2-c20.pdf">Chapter 20: Telecom System Security</a></LI>
+<LI><a href="Papers/SEv2-c21.pdf">Chapter 21: Network Attack and Defence</a></LI>
+<LI><a href="Papers/SEv2-c22.pdf">Chapter 22: Copyright and DRM</a></LI>
+<LI><a href="Papers/SEv2-c23.pdf">Chapter 23: The Bleeding Edge</a></LI>
+<LI><a href="Papers/SEv2-c24.pdf">Chapter 24: Terror, Justice and Freedom</a></LI>
+<LI><a href="Papers/SEv2-c25.pdf">Chapter 25: Managing the Development of Secure Systems</a></LI>
+<LI><a href="Papers/SEv2-c26.pdf">Chapter 26: System Evaluation and Assurance</a></LI>
+<LI><a href="Papers/SEv2-c27.pdf">Chapter 27: Conclusions</a></LI>
+<LI><a href="Papers/SEv2-biblio.pdf">Bibliography</a></LI>
+<LI><a href="Papers/SEv2-index.pdf">Index</a></LI>
+</UL>
+
+<P>
+<UL>
+<TYPE=1><START=1>
+<LI><strong>Buy from <a
+href="http://www.amazon.com/exec/obidos/ASIN/0470068523/rossandersshomep">Amazon.com</a></LI>
+
+<LI>Buy from <a
+href="http://he-cda.wiley.com/WileyCDA/HigherEdTitle/productCd-0470068523.html">Wiley</a></LI>
+
+<LI>Buy from <a
+href="http://www.amazon.co.uk/exec/obidos/ASIN/0470068523/rossandersshomep">Amazon.co.uk</a> (<a href="http://www.amazon.co.uk/gp/product/B004BDOZI0/ref=as_li_tf_tl?ie=UTF8&tag=rossanderssho-21&linkCode=as2&camp=1634&creative=6738&creativeASIN=B004BDOZI0">Kindle version</a>)</LI>
+</strong>
+</UL>
+
+<P><strong>Endorsements:</strong>
+<P>
+&lsquo;There is an extraordinary textbook written by Ross Anderson, professor of computer security at University of Cambridge. It’s called Security Engineering, and despite being more than 1,000 pages long, it’s one of the most readable pop-science slogs of the decade.&rsquo;
+<br><a href="http://www.theguardian.com/technology/2014/dec/05/when-data-gets-creepy-secrets-were-giving-away">Ben Goldacre</a>
+
+<P>
+&lsquo;I'm incredibly impressed that one person could produce such a thorough
+coverage. Moreover, you make the stuff easy and enjoyable to read. I
+find it just as entertaining &mdash; and far more useful &mdash;
+than novels (and my normal science fiction). When I first got it in
+the mail, I said to myself "I'm never going to read all of that." But
+once I started reading I just kept going and going. Fantastic: well
+done. Now, let's hope that all those in charge of security for
+information technology will also read the book and heed the lessons.&rsquo;
+<br><a href="http://www.jnd.org/">Don Norman</a>
+
+<P>
+&lsquo;The book that you MUST READ 
+RIGHT NOW is the second edition of Ross Anderson's Security Engineering book. 
+Ross did a complete pass on his classic tome and somehow made it even 
+better...&rsquo;
+<br> <a 
+href="https://www.garymcgraw.com">Gary McGraw</a>
+
+<P>
+&lsquo;It's beautiful. This is the best book on the topic there 
+is&rsquo;<br><a 
+href="http://www.cl.cam.ac.uk/users/rja14/bruce.html">Bruce Schneier</a>
+<P>
+
+<strong>Errata and supplementary materials:</strong> 
+Here are the <a 
+href="http://www.cl.cam.ac.uk/~rja14/book/v2errata.html">errata</a> for the
+second edition, and here's a page of <a
+href="http://www.cl.cam.ac.uk/~rja14/book/notes.html">notes and links</a> 
+concerning relevant topics that I've come across since publication.
+
+<P>
+If you're a college professor 
+thinking of using my book in class, note that we use my book in three courses 
+at Cambridge: 
+<UL><LI>the first part in second-year Introduction to Security (<a 
+href="http://www.cl.cam.ac.uk/teaching/0708/IntroSec/">course material</a> 
+and <a 
+href="http://www.cl.cam.ac.uk/teaching/exams/pastpapers/t-IntroductiontoSecurity.html">past 
+exam questions</a>)
+<LI> the second in third-year Security (<a 
+href="http://www.cl.cam.ac.uk/teaching/0910/Security/">course material</a> and <a 
+href="http://www.cl.cam.ac.uk/teaching/exams/pastpapers/t-Security.html">questions</a>), and 
+<LI>the third part in our second-year Software Engineering (<a
+href="http://www.cl.cam.ac.uk/teaching/0910/SWEng/">course</a>, <a
+href="http://www.cl.cam.ac.uk/teaching/exams/pastpapers/t-SoftwareEngineering.html">questions</a> 
+and <a 
+href="http://www.cl.cam.ac.uk/teaching/exams/pastpapers/t-SoftwareEngineeringI.html">still 
+more questions</a>). 
+</UL>
+I hope you find these useful. You're welcome to use and adapt any of my slides
+if you wish under this <a
+href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons</a>
+license. Also, if you're an instructor at an accredited institution, you can 
+request an evaluation copy via <a 
+href="http://eu.wiley.com/WileyCDA/WileyTitle/productCd-0470068523.html">Wiley's 
+website</a>.
+<HR>
+
+<P><strong>The first edition (2001)</strong>
+
+<P>You can also download all of the first edition for free:
+
+<P>
+The <a href="Papers/SE-FM.pdf">foreword, preface and other front matter</a>
+<OL>
+<TYPE=1><START=1>
+<LI><a href="Papers/SE-01.pdf">What is Security Engineering?</a></LI>
+<LI><a href="Papers/SE-02.pdf">Protocols</a></LI>
+<LI><a href="Papers/SE-03.pdf">Passwords</a></LI>
+<LI><a href="Papers/SE-04.pdf">Access Control</a></LI>
+<LI><a href="Papers/SE-05.pdf">Cryptography</a></LI>
+<LI><a href="Papers/SE-06.pdf">Distributed Systems</a></LI>
+<LI><a href="Papers/SE-07.pdf">Multilevel Security</a></LI>
+<LI><a href="Papers/SE-08.pdf">Multilateral Security</a></LI>
+<LI><a href="Papers/SE-09.pdf">Banking and Bookkeeping</a></LI>
+<LI><a href="Papers/SE-10.pdf">Monitoring Systems</a></LI>
+<LI><a href="Papers/SE-11.pdf">Nuclear Command and Control</a></LI>
+<LI><a href="Papers/SE-12.pdf">Security Printing and Seals</a></LI>
+<LI><a href="Papers/SE-13.pdf">Biometrics</a></LI>
+<LI><a href="Papers/SE-14.pdf">Physical Tamper Resistance</a></LI>
+<LI><a href="Papers/SE-15.pdf">Emission Security</a></LI>
+<LI><a href="Papers/SE-16.pdf">Electronic and Information Warfare</a></LI>
+<LI><a href="Papers/SE-17.pdf">Telecom System Security</a></LI>
+<LI><a href="Papers/SE-18.pdf">Network Attack and Defense</a></LI>
+<LI><a href="Papers/SE-19.pdf">Protecting E-Commerce Systems</a></LI>
+<LI><a href="Papers/SE-20.pdf">Copyright and Privacy Protection</a></LI>
+<LI><a href="Papers/SE-21.pdf">E-Policy</a></LI>
+<LI><a href="Papers/SE-22.pdf">Management Issues</a></LI>
+<LI><a href="Papers/SE-23.pdf">System Evaluation and Assurance</a></LI>
+<LI><a href="Papers/SE-24.pdf">Conclusions</a></LI>
+<LI><a href="Papers/SE-Bib.pdf">Bibliography</a></LI>
+</OL>
+Finally, here's a <a 
+href="http://www.cl.cam.ac.uk/~rja14/musicfiles/manuscripts/SEv1.pdf">single 
+pdf of the whole book</a>. It's 17Mb, but a number of people asked me for it.
+<P>
+My goal in making the first edition <a
+href="http://www.lightbluetouchpaper.org/2006/08/25/with-a-single-bound-it-was-free/">freely
+available</a> five years after publication was twofold. First, I wanted to
+reach the widest possible audience, especially among poor students. Second, I
+am a pragmatic libertarian on free culture and free software issues; I think
+that many publishers (especially of music and software) are too defensive of
+copyright. (My colleague David MacKay found that putting his <a
+href="http://www.inference.phy.cam.ac.uk/mackay/itila/">book on coding
+theory</a> online actually helped its sales. Book publishers are getting the
+message faster than the music or software folks.) I expect to put the whole
+second edition online too in a few years.
+
+<P> If you own the first edition of my book, I hope you liked it enough to
+upgrade to the second edition. I also have online errata for the first edition
+<a HREF="http://www.cl.cam.ac.uk/~rja14/errata.html">here</a>.
+<P>
+
+Following enquiries from blind students, <A HREF="http://lacal.net/audio/">Jose
+C. Lacal</A> has contributed these MP3 files of the first edition:
+<a href="http://lacal.net/audio/files/se/se-preface.mp3">preface</a>, 
+<a href="http://lacal.net/audio/files/se/se-01.mp3">chapter 1</a>,
+<a href="http://lacal.net/audio/files/se/se-02.mp3">chapter 2</a>,
+<a href="http://lacal.net/audio/files/se/se-03.mp3">chapter 3</a>,
+<a href="http://lacal.net/audio/files/se/se-04.mp3">chapter 4</a>,
+<a href="http://lacal.net/audio/files/se/se-06.mp3">chapter 6</a>, and
+<a href="http://lacal.net/audio/files/se/se-07.mp3">chapter 7</a>.
+
+<P>
+<H3>Where to buy the second edition</H3>
+
+<UL>
+<LI><A
+href="http://www.amazon.com/exec/obidos/ASIN/0470068523/rossandersshomep">Amazon.com</A></LI>
+<LI>Buy from <a
+href="http://he-cda.wiley.com/WileyCDA/HigherEdTitle/productCd-0470068523.html">Wiley</a></LI>
+<LI><a
+HREF="http://www.amazon.co.uk/exec/obidos/ASIN/0470068523/rossanderssho-21">Amazon.co.uk</a></LI>
+<LI><A
+HREF="http://www.bestwebbuys.com/books/compare/isbn/0470068523">BestBookBuys</a> (for secondhand)</LI>
+</UL>
+
+<P>There are <a HREF="http://www.cl.cam.ac.uk/~rja14/reviews.html">reviews of
+the first edition</a>, which was translated into <a
+HREF="http://www.amazon.jp/exec/obidos/ASIN/4822281426/rossanderssho-21/">Japanese</a>, <a
+HREF="http://www.china-pub.com/computers/common/info.asp?id=13730">Chinese</a>
+and Polish.
+
+<hr>
+<P>
+Return to <a HREF="http://www.cl.cam.ac.uk/~rja14/">Ross Anderson's home 
+page</a>
+<P>
+
+<hr>
+</BODY>
+</HTML>

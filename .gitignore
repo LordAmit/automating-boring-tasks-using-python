@@ -109,3 +109,6 @@ ENV/
 *.idea*
 
 *.tex
+duplicate.db
+duplicate.sqlite
+Trash

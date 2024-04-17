@@ -1,0 +1,150 @@
+<details>
+<summary>ইউএসএতে উচ্চ শিক্ষা</summary>
+</details>
+<details>
+<summary>CGPA</summary>
+<details>
+<summary> আমার CGPA x.yz; আমার কি হবে?</summary>
+ হতে পারে; আমাদের দেশের গ্রেড ফ্লাকচুয়েশন অনেক বেশি।
+  কাজেই এক ভার্সিটির 4.00 আরেক ভার্সিটির 3.50 এর সমান হতে পারে; কমও হতে পারে।
+  বেটার ফোকাস করেন আপনার ভালো দিক গুলোতে।
+  নানা সমস্যার কারণে CGPA কম হতেই পারে। তার মানে এই না যে আপনি পারেন না।
+  কাজেই আপনি ওদের সেই চিন্তা করার সুযোগ দিন আপনার অন্যান্য কাজের মাধ্যমে।
+
+</details>
+<details>
+<summary>Publication নাই, আমার কি হবে?</summary>
+
+ থাকলে খুবই ভালো। না থাকলে সমস্যা সাধারণত হয় না।
+খুব ভালো ইউনিগুলোতে গবেষণার অভিজ্ঞতার দাম আছে। কাজেই সেসকল ইউনির ক্ষেত্রে পাবলিকেশন থাকলে ভালো।
+কিন্তু সবসময় মনে রাখবেন - পিএইচডি এর আগে গবেষণার অভিজ্ঞতা থাকা অতিরিক্ত যোগ্যতা হিসাবে গণ্য করা হয়, যোগ্যতা না।
+
+</details>
+<details>
+<summary>FALL? Spring? Summer?!</summary>
+
+ এত বেশি কিছু চিন্তার দরকার নাই, আপনার ফান্ডিং পাবার ইচ্ছা থাকলে FALL Semester টার্গেট করে এপ্লাই করার প্রস্তুতি নিবেন কারণ ফান্ডিং এই সময়ে পাওয়া যায় বেশি।
+ফল এর ক্লাস শুরু হয় আগস্ট মাসে।
+এর জন্য এডমিশন পেতে আপনার ভার্সিটি ভেদে আগের বছরের
+September - December এর ভিতরে এপ্লাই করা শেষ করতে হবে।
+ তবে ভালো টাকা পয়সা ওয়ালা বিশ্ববিদ্যালয়গুলোতে SPRING SEMESTER এও ভর্তি হতে পারেন।
+অনেক ক্ষেত্রে **এডমিশন পাওয়া সহজও**, কারণ তখন ফান্ডিং কম বলে কম লোকজন এপ্লাই করে!
+
+</details>
+<details>
+<summary>এটা কি হুবহু ফলো করবো?</summary>
+
+<details>
+<summary> প্লিজ, হুবহু ফলো করবেন না। ঈশ্বরপ্রদত্ত অসাধারণ একটা বুদ্ধিদীপ্ত মাথা আছে আপনার। সেটা খাটান। হুবহু ফলো করে কোন কিছু হবে না। নিজের মতো একটু চিন্তা করেন :)</summary>
+
+</details>
+<details>
+<summary>PhD এর জন্য বোনাস টিপস</summary>
+
+<details>
+<summary> ব্যক্তিগত ওয়েবসাইট</summary>
+<details>
+<summary> পাবলিকেশন থাকলে ওয়েবসাইট মেইনটেইন করবেন।</summary>
+    চমকদার বা চাকচিক্যময় না, ছিমছাম।
+    সেখানে Publications কি আছে তা, কি নিয়ে কাজ করেন, কি নিয়ে কাজ করতে পছন্দ করেন এগুলো লিখবেন।  যেমন [আমারটা দেখতে পারেন](https://amitsealami.com/publications)।
+<details>
+<summary> ভার্সিটির র‍্যাঙ্কিংয়ের চাইতে আমি ব্যক্তিগত ভাবে মনে করি সুপারভাইজর বেশি গুরুত্বপূর্ণ গবেষণা শেখার জন্য।</summary>
+    ভালো র‍্যাঙ্কিংয়ের ভার্সিটির পঁচা সুপারভাইজরের চেয়ে  পঁচা ভার্সিটির ভালো সুপারভাইজর বেশি কাজের। এ বিষয়ে [আমার লেখা পড়তে পারেন](https://amitsealami.com/blog/2019/03/05/USA-education-2/)
+
+</details>
+<details>
+<summary>পিএইচডি না মাস্টার্স</summary>
+
+ নির্ভর করছে আপনি কি চান করতে জীবনে তার উপরে।
+পড়াশোনার অনেক ইচ্ছা থাকলে, গবেষণা বা শিক্ষকতায় আসতে চাইলে PhD. নাহলে সাধারণত দরকার হয় না।
+
+<details>
+<summary> কি কি লাগবে?</summary>
+ সাধারণত ৪টা জিনিষ লাগে, গুরুত্বের ক্রম অনুসারে এগুলো হলো:
+SOP, LOR, CGPA, GRE+TOEFL
+
+</details>
+<details>
+<summary>GRE</summary>
+
+<details>
+<summary> কি পড়বো? Magoosh/Manhattan/আরো কিছু?</summary>
+<details>
+<summary> Quant</summary>
+ যেকোন একটা ঠিক মতো পড়েন; ভালো মতো বুঝে সলভ করলে ম্যাথে ১৬০ তোলা খুব কঠিন না;
+    আমাদের HSC আর SSC এর মতোই বেশিরভাগ অংক
+    আমার ব্যক্তিগত পছন্দ Magoosh আর Manhattan.
+<details>
+<summary> Verbal</summary>
+ ইংরেজির ব্যাসিক জানতে Word Power Made Easy বইটা দিয়ে শুরু করেন।
+    তার পরে Barron's 333, তার পরে Magoosh এর ১০০০, তার পরে আপনার যা মন চায়
+<details>
+<summary> আমার স্কোর 3XX, আমার কি হবে?</summary>
+<details>
+<summary> স্কোর এর সাথে দুইটা জিনিষ গুরুত্বপূর্ণ। একটা হলো আপনার পুরো প্যাকেজ কি বলে।</summary>
+    আপনার যদি SOP, LOR, CGPA  ভালো থাকে; GRE স্কোর অত বেশি লাগে না।
+    দ্বিতীয়ত, GRE তে percentile ও গুরুত্বপূর্ণ। আপনার স্কোর কম,
+    কিন্তু পার্সেন্টাইলে অনেক বেশি মানে আসলে আপনার স্কোর বেশি।
+<details>
+<summary> AWA</summary>
+<details>
+<summary> How to Lie with Statistics বই টা পড়তে পারেন;</summary>
+    এটার প্রথম তিন অধ্যায় পড়লে Logical Fallacy গুলো নিয়ে বুঝে যাবেন।
+    সেগুলো লাগবে আপনার Argument টাস্ক এ।
+    আর ETS GRE GUIDE এর স্যাম্পল উত্তর আর সেগুলোর ব্যখাগুলো দেখতে পারেন।
+
+</details>
+<details>
+<summary>IELTS / TOEFL?</summary>
+
+<details>
+<summary> যদিও IELTS অনেক যায়গায় নেয়,</summary>
+    তবে রেজাল্ট পাঠানো জটিল এবং এক এক বিশ্ববিদ্যালয় এক এক ভাবে নেয়।
+    তাই সুবিধা বিবেচনা করলে TOEFL দেয়া ভালো। আমি IELTS দিয়েছিলাম। আমার রেজাল্ট পাঠানো লেগেছিলো DHL এ করে।
+<details>
+<summary> IELTS</summary>
+<details>
+<summary> Listening</summary>
+ Subtitle ছাড়া মুভি দেখেন, IELTS প্র্যাকটিস করেন।
+<details>
+<summary> Reading</summary>
+ গল্প পড়েন, IELTS প্র্যাকটিস করেন। শব্দের মানে আন্দাজ না করে ডিকশনারি দেখুন,
+    তার সাথে Etymology (মানে শব্দের মূল শব্দ) ঘাঁটুন
+ Speaking / Writing: [IELTSLIZ](ieltsliz.com) - অসাধারণ ওয়েবসাইট। অনেক কিছু শিখতে পারবেন এটা থেকে।
+
+</details>
+<details>
+<summary>SOP</summary>
+
+ কপি দেয়া যাবে আপনারটার?
+<details>
+<summary> তাহলে করবো টা কী?</summary>
+<details>
+<summary> অনলাইনে অনেক ভার্সিটির গাইডলাইন পাবেন। যেমন:</summary>
+ https://users.ece.cmu.edu/~mabdelm/statement-of-purpose-tips.html
+ http://mse.isri.cmu.edu/software-engineering/documents/statement-of-purpose-guidelines.pdf
+ [আমার নিজের লেখা](https://amitsealami.com/blog/2020/12/20/writing-sop-higher-studies/) একটা গাইডলাইন আছে বিস্তারিত উদাহরণ আর ব্যাখা সহ, পাবেন এখানে
+<details>
+<summary> [কী করা উচিত না](http://www.cs.cmu.edu/~pavlo/blog/2015/10/how-to-write-a-bad-statement-for-a-computer-science-phd-admissions-application.html)?</summary>
+
+</details>
+<details>
+<summary>LOR</summary>
+ নিবো কার থেকে?
+ কয়টা?
+ কী থাকে সেখানে?
+
+</details>
+<details>
+<summary>মন্তব্য? মতামত? আমি কে?</summary>
+
+ আমি অমিত, ঢাকা বিশ্ববিদ্যালয়ে সফটওয়্যার ইঞ্জিনিয়ারিং এর শিক্ষক হিসাবে আছি
+ এখন শিক্ষাছুটিতে, আমেরিকায় পিএইচডি প্রোগ্রামে
+<details>
+<summary> [ফেসবুক](https://facebook.com/AmitSealAmi)</summary>
+
+</details>
+<details>
+<summary>সর্বশেষ হালনাগাদ</summary>
+
+ জানুয়ারি ২৯, ২০২১

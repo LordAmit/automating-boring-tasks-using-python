@@ -1,0 +1,1 @@
+/Users/amitseal/git/automating-boring-tasks-using-python/image_sort_landscape_portrait/src/venv/bin/python /Users/amitseal/git/automating-boring-tasks-using-python/image_sort_landscape_portrait/src/main.py
