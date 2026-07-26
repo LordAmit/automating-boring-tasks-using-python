@@ -22,7 +22,8 @@ class ImageWidget(QWidget):
         self._image_label = QLabel(self)
         self._image_label.setSizePolicy(QSizePolicy.Ignored,
                                         QSizePolicy.Ignored)
-        self._image_label.setScaledContents(True)
+        self._image_label.setAlignment(Qt.AlignCenter)
+        self._original_pixmap = None
 
         # images_list
         self._all_images: List = []
@@ -150,10 +151,16 @@ class ImageWidget(QWidget):
             index = 0
         self._current_index = index
         l.log("setting image")
-        image_pix_map = QPixmap(self._all_images[self._current_index])
-        print("image: ", image_pix_map.width(), image_pix_map.height())
-        self._image_label.setPixmap(image_pix_map)
+        self._original_pixmap = QPixmap(self._all_images[self._current_index])
+        print("image: ", self._original_pixmap.width(), self._original_pixmap.height())
+        self._scale_and_display_image()
         self.set_title(self._all_images[self._current_index])
+
+    def _scale_and_display_image(self):
+        if self._original_pixmap and not self._original_pixmap.isNull():
+            scaled_pixmap = self._original_pixmap.scaledToFit(
+                self._image_label.size(), Qt.KeepAspectRatio)
+            self._image_label.setPixmap(scaled_pixmap)
 
     # def set_line_edit(self, edit_line: QLineEdit):
     #     self._line_edit = edit_line
@@ -327,6 +334,10 @@ class ImageWidget(QWidget):
             bpg.pause_secs -= time
         l.log("decreasing pause_secs for autoplay: " + str(bpg.pause_secs))
         self.timer.setInterval(bpg.pause_secs * 1000)
+
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        self._scale_and_display_image()
 
     def get_current_image_path_str(self) -> str:
         return self._all_images[self._current_index]
