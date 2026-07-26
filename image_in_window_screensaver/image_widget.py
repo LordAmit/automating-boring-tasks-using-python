@@ -158,8 +158,20 @@ class ImageWidget(QWidget):
 
     def _scale_and_display_image(self):
         if self._original_pixmap and not self._original_pixmap.isNull():
-            scaled_pixmap = self._original_pixmap.scaledToFit(
-                self._image_label.size(), Qt.KeepAspectRatio)
+            size = self._image_label.size()
+            if size.width() <= 0 or size.height() <= 0:
+                return
+
+            if hasattr(self._original_pixmap, "scaledToFit"):
+                scaled_pixmap = self._original_pixmap.scaledToFit(
+                    size.width(), size.height())
+            else:
+                scaled_pixmap = self._original_pixmap.scaled(
+                    size.width(),
+                    size.height(),
+                    Qt.KeepAspectRatio,
+                    Qt.SmoothTransformation,
+                )
             self._image_label.setPixmap(scaled_pixmap)
 
     # def set_line_edit(self, edit_line: QLineEdit):
