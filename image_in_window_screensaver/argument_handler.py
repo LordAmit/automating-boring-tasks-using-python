@@ -4,6 +4,7 @@ import custom_log as l
 _file_path: str = None
 _ignore_keyword: str = None
 _backup_path: str = None
+_start_image_path: str = None
 
 def get_path() -> str:
     global _file_path
@@ -29,19 +30,28 @@ def get_backup()->str:
         _get_arguments()
     return _backup_path
 
+def get_start_image_path()->str:
+    global _start_image_path
+    if not _start_image_path:
+        _get_arguments()
+    return _start_image_path
 
 def _get_arguments():
     l.log("parsing arguments")
     global _file_path
     global _ignore_keyword
     global _backup_path
+    global _start_image_path
 
     parser = argparse.ArgumentParser()
     parser.add_argument('--ignore', type=str, help='keywords to be ignored while parsing files')
     parser.add_argument('--path', type=str, help='address from where images will be pursed', required=True)
     parser.add_argument('--backup', type=str, help='directory path for backing up non-compressed images')
+    parser.add_argument('--start_image', type=str, help='start image path')
     args = parser.parse_args()
     _file_path = args.path
     _backup_path = args.backup
+    if args.start_image:
+        _start_image_path = args.start_image
     if args.ignore:
         _ignore_keyword = args.ignore
