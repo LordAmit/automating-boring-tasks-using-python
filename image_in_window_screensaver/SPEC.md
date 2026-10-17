@@ -164,9 +164,13 @@ Conventions to keep:
 7. Filtering with `1` or `2` reloads the filtered list and jumps to the home
    image given by `--start_image`. If no home image was given, or it is not
    in the filtered set, the first image of the filtered list is shown.
-8. Pressing `3` reloads the unfiltered list, keeps the on-screen image if it
-   is still present, and clears the active filter so a later `d` or `e` sort
-   applies to all images.
+8. Pressing `3` reloads the unfiltered list, reshuffles it when
+   shuffle-on-start is on, shows index 0, and clears the active filter so a
+   later `d` or `e` sort applies to all images.
+9. A bookmark set with `b` is stored as a path and survives `s`, `1`, `2`,
+   `3`, `r`, `d` and `e`. `0` always returns to it. If it is not in the
+   current filtered list, index 0 is shown. With no bookmark set, `0` goes to
+   the shuffle start image as before.
 
 ## Feature: keymap overlay (approved 2026-10-17)
 
@@ -184,6 +188,24 @@ Acceptance criteria:
 
 Out of scope: pausing the slideshow, a separate draggable window, mouse
 interaction with the overlay, `?` toggling itself closed, readme generation.
+
+## Feature: delay toast (approved 2026-10-17)
+
+Whenever the slideshow delay changes (`=`, `-`, `+`, `_`, `t`, `y`), the new
+value is shown as a translucent label at the bottom center of the window and
+hides on its own after 2 seconds. `p` shows "playing" or "paused" in the
+same toast.
+
+Acceptance criteria:
+
+1. Every delay key shows the toast with the new value in seconds; `p`
+   shows the new play state.
+2. The toast hides 2 seconds after the last press. Fast repeated presses
+   update the same toast and restart the countdown; there is never more than
+   one toast.
+3. The toast never blocks keys or mouse input and does not affect the
+   slideshow timer.
+4. The toast stays bottom center after a resize or fullscreen toggle.
 
 ## Open Questions
 

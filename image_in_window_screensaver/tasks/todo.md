@@ -33,3 +33,7 @@ Spec: ../SPEC.md (status: draft, awaiting approval)
   - Acceptance: see spec section criteria 1 to 4
   - Verify: run viewer, press `?` in windowed and fullscreen mode, press `Esc`; manual check pending
   - Files: image_widget.py, readme.md
+- [x] Task: delay toast on `=`, `-`, `+`, `_`, `t`, `y`, and play state on `p` (SPEC.md "Feature: delay toast")
+  - Acceptance: see spec section criteria 1 to 4
+  - Verify: run viewer, tap `=` five times fast, confirm one toast, hidden 2 s after last tap; manual check pending
+  - Files: image_widget.py, readme.md

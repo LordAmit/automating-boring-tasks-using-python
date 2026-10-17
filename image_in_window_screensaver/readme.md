@@ -60,6 +60,8 @@ So, that's the only step of setup. The acceptable image formats are bmp, png and
 - `+` = increase delay by 10 seconds
 - `_` = decrease delay by 10 seconds
 
+Changing the delay shows the new value briefly at the bottom of the window; `p` shows playing/paused the same way.
+
 - `?` = show the keymap as an overlay
 - `Esc` = hide the keymap
 

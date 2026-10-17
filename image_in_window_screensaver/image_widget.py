@@ -67,11 +67,25 @@ class ImageWidget(QWidget):
         self._help_overlay.setAttribute(Qt.WA_TransparentForMouseEvents)
         self._help_overlay.hide()
 
+        # delay toast: shows the new slideshow delay briefly, bottom center
+        self._delay_toast = QLabel(self)
+        self._delay_toast.setAlignment(Qt.AlignCenter)
+        self._delay_toast.setStyleSheet(
+            "background-color: rgba(0, 0, 0, 170); color: white;"
+            " font-size: 28px; padding: 10px 24px; border-radius: 8px;")
+        self._delay_toast.setAttribute(Qt.WA_TransparentForMouseEvents)
+        self._delay_toast.hide()
+        self._delay_toast_timer = QTimer()
+        self._delay_toast_timer.setSingleShot(True)
+        self._delay_toast_timer.setInterval(2000)
+        self._delay_toast_timer.timeout.connect(self._delay_toast.hide)
+
         # images_list
         self._all_images: List = []
 
         # properties
         self._shuffle_start_index = 0
+        self._bookmark_path: str = None  # set by b, read by 0
         self._current_index = 0
         self.is_full_screen: bool = False
         # self.is_playing: bool = False
@@ -157,13 +171,13 @@ class ImageWidget(QWidget):
 
 
     def reset_all(self):
-        """Reload every image from both folders, dropping any 1/2 filter."""
+        """Reload every image from both folders, dropping any 1/2 filter.
+        Reshuffles like 1/2 do, and lands on index 0 of the new list."""
         l.log("reset all: reloading unfiltered image list")
-        current_image_path = self.get_current_image_path_str()
-        self.initialize_images(mode=None,
-                               current_image_path=current_image_path)
+        self.initialize_images()
         if bpg.shuffle_from_start:
             self.image_shuffle()
+            self._set_image(0)
 
     def sort_by_date(self, reverse_sort: bool = False):
         l.log("sorting images by date")
@@ -284,8 +298,8 @@ class ImageWidget(QWidget):
             l.log("Key V")
             self._browse_event()
         elif key == Qt.Key_B:
-            l.log("Key B")
-            self._shuffle_start_index = self._current_index
+            l.log("Key B / bookmark current image")
+            self._bookmark_path = self.get_current_image_path_str()
         elif key == Qt.Key_1:
             l.log("Key 1 --> landscape mode")
             self.initialize_images("landscape/", current_image_path=self.start_image)
@@ -297,8 +311,11 @@ class ImageWidget(QWidget):
             if bpg.shuffle_from_start:
                 self.image_shuffle()
         elif key == Qt.Key_0:
-            l.log("Key 0 --> go to index 0")
-            if self._shuffle_start_index != 0:
+            l.log("Key 0 --> go to bookmark")
+            if self._bookmark_path:
+                self._current_index = self.get_index_from_image_path(
+                    self._bookmark_path)
+            elif self._shuffle_start_index != 0:
                 self._current_index = self._shuffle_start_index
             else:
                 self._current_index = 0
@@ -362,8 +379,10 @@ class ImageWidget(QWidget):
             )
         if self.is_playing:
             self.play()
+            self.flash_toast("playing")
         else:
             self.pause()
+            self.flash_toast("paused")
 
     def play(self):
         l.log("slideshow running")
@@ -393,6 +412,7 @@ class ImageWidget(QWidget):
             bpg.pause_secs += time
         l.log("increasing pause_secs for autoplay: " + str(bpg.pause_secs))
         self.timer.setInterval(bpg.pause_secs * 1000)
+        self.flash_delay()
 
     def decrease_timer(self, time=1):
         if (bpg.pause_secs - time) < bpg.least_pause_secs:
@@ -404,6 +424,7 @@ class ImageWidget(QWidget):
             bpg.pause_secs -= time
         l.log("decreasing pause_secs for autoplay: " + str(bpg.pause_secs))
         self.timer.setInterval(bpg.pause_secs * 1000)
+        self.flash_delay()
 
     def show_help(self):
         self._help_overlay.setGeometry(self.rect())
@@ -413,10 +434,30 @@ class ImageWidget(QWidget):
     def hide_help(self):
         self._help_overlay.hide()
 
+    def flash_delay(self):
+        self.flash_toast("{} s".format(bpg.pause_secs))
+
+    def flash_toast(self, text: str):
+        """Show text for 2 s at the bottom center. Repeated calls update the
+        text and restart the countdown; only one toast ever exists."""
+        self._delay_toast.setText(text)
+        self._delay_toast.adjustSize()
+        self._position_delay_toast()
+        self._delay_toast.raise_()
+        self._delay_toast.show()
+        self._delay_toast_timer.start()
+
+    def _position_delay_toast(self):
+        size = self._delay_toast.size()
+        x = (self.width() - size.width()) // 2
+        y = self.height() - size.height() - 40
+        self._delay_toast.move(x, y)
+
     def resizeEvent(self, event):
         super().resizeEvent(event)
         self._scale_and_display_image()
         self._help_overlay.setGeometry(self.rect())
+        self._position_delay_toast()
 
     def get_current_image_path_str(self) -> str:
         return self._all_images[self._current_index]
