@@ -42,6 +42,7 @@ So, that's the only step of setup. The acceptable image formats are bmp, png and
 - `f` = Toggle Full screen mode
 - `v` = View image in File browser
 - `b` = bookmark current image
+- `0` = Go to bookmarked image (or the image where the shuffle started)
 
 - `1` = landscape images only
 - `2` = portrait images only
@@ -58,5 +59,8 @@ So, that's the only step of setup. The acceptable image formats are bmp, png and
 - `-` = decrease delay by 1 second
 - `+` = increase delay by 10 seconds
 - `_` = decrease delay by 10 seconds
+
+- `?` = show the keymap as an overlay
+- `Esc` = hide the keymap
 
 That's all folks!

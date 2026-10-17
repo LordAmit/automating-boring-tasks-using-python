@@ -14,6 +14,38 @@ import custom_log as l
 import file_walker
 
 
+# Hand-maintained; keep in sync with the Shortcuts table in readme.md.
+KEYMAP_HELP = """\
+s                      shuffle images in list
+Left / Backspace       previous image
+Right / Space / n      next image
+<  (shift+,)           previous 10th image
+>  (shift+.)           next 10th image
+Delete                 send current image to Trash
+
+f                      toggle full screen mode
+v                      view image in file browser
+b                      bookmark current image
+0                      go to bookmarked image (or where the shuffle started)
+
+1                      landscape images only
+2                      portrait images only
+3                      reset all
+4                      go to the 1st image, in whatever applied sort
+r                      reverse the current order
+e                      sort by date (new to old)
+d                      sort by date (old to new)
+
+p                      toggle play/pause
+t                      pomodoro mode, delay increased to 25 minutes
+y                      fast mode, delay decreased to 1 second
+=  /  -                increase / decrease delay by 1 second
++  /  _                increase / decrease delay by 10 seconds
+
+?                      show this keymap
+Esc                    hide this keymap"""
+
+
 class ImageWidget(QWidget):
     def __init__(self):
         self.default_title = "Amit's Image Viewer"
@@ -24,6 +56,16 @@ class ImageWidget(QWidget):
                                         QSizePolicy.Ignored)
         self._image_label.setAlignment(Qt.AlignCenter)
         self._original_pixmap = None
+
+        # keymap overlay, hidden until ? is pressed
+        self._help_overlay = QLabel(self)
+        self._help_overlay.setText("<pre>" + KEYMAP_HELP + "</pre>")
+        self._help_overlay.setAlignment(Qt.AlignCenter)
+        self._help_overlay.setStyleSheet(
+            "background-color: rgba(0, 0, 0, 190); color: white;"
+            " font-size: 14px;")
+        self._help_overlay.setAttribute(Qt.WA_TransparentForMouseEvents)
+        self._help_overlay.hide()
 
         # images_list
         self._all_images: List = []
@@ -113,6 +155,15 @@ class ImageWidget(QWidget):
         self._all_images.reverse()
         self._current_index = self.get_index_from_image_path(current_image_path)
 
+
+    def reset_all(self):
+        """Reload every image from both folders, dropping any 1/2 filter."""
+        l.log("reset all: reloading unfiltered image list")
+        current_image_path = self.get_current_image_path_str()
+        self.initialize_images(mode=None,
+                               current_image_path=current_image_path)
+        if bpg.shuffle_from_start:
+            self.image_shuffle()
 
     def sort_by_date(self, reverse_sort: bool = False):
         l.log("sorting images by date")
@@ -260,6 +311,7 @@ class ImageWidget(QWidget):
             self.sort_by_date(reverse_sort=True)
         elif key == Qt.Key_3:
             l.log("Key 3 / Reset all")
+            self.reset_all()
         elif key == Qt.Key_4:
             l.log("Key 4 / Set image to 0th Index in whatever sort")
             self._set_image(index=0)
@@ -285,6 +337,12 @@ class ImageWidget(QWidget):
         elif key == Qt.Key_T:
             print("T pressed")
             self.increase_timer(bpg.max_pause_secs)
+        elif key == Qt.Key_Question:
+            l.log("? pressed / show keymap")
+            self.show_help()
+        elif key == Qt.Key_Escape:
+            l.log("Esc pressed / hide keymap")
+            self.hide_help()
 
         if self.is_playing:
             self.play()
@@ -347,9 +405,18 @@ class ImageWidget(QWidget):
         l.log("decreasing pause_secs for autoplay: " + str(bpg.pause_secs))
         self.timer.setInterval(bpg.pause_secs * 1000)
 
+    def show_help(self):
+        self._help_overlay.setGeometry(self.rect())
+        self._help_overlay.raise_()
+        self._help_overlay.show()
+
+    def hide_help(self):
+        self._help_overlay.hide()
+
     def resizeEvent(self, event):
         super().resizeEvent(event)
         self._scale_and_display_image()
+        self._help_overlay.setGeometry(self.rect())
 
     def get_current_image_path_str(self) -> str:
         return self._all_images[self._current_index]

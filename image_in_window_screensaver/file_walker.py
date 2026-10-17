@@ -28,10 +28,10 @@ def walk(mode=None, is_sorted: bool = False,
     """
     image_paths = []
     # path: str = argh.get_path()
+    global current_mode
+    current_mode = mode
     if mode:
         dir_path += mode
-        global current_mode
-        current_mode = mode
     c_log.log(dir_path)
     ignore: str = argh.get_ignore_word()
     c_log.log("checking path integrity")
