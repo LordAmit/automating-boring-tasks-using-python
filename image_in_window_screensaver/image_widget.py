@@ -1,3 +1,4 @@
+import html
 import os
 import random
 import time
@@ -15,35 +16,53 @@ import file_walker
 
 
 # Hand-maintained; keep in sync with the Shortcuts table in readme.md.
-KEYMAP_HELP = """\
-s                      shuffle images in list
-Left / Backspace       previous image
-Right / Space / n      next image
-<  (shift+,)           previous 10th image
->  (shift+.)           next 10th image
-Delete                 send current image to Trash
+# None marks a blank separator row.
+KEYMAP = [
+    ("s", "shuffle images in list"),
+    ("Left / Backspace", "previous image"),
+    ("Right / Space / n", "next image"),
+    ("<  (shift+,)", "previous 10th image"),
+    (">  (shift+.)", "next 10th image"),
+    ("Delete", "send current image to Trash"),
+    None,
+    ("f", "toggle full screen mode"),
+    ("v", "view image in file browser"),
+    ("b", "bookmark current image"),
+    ("0", "go to bookmarked image (or where the shuffle started)"),
+    None,
+    ("1", "landscape images only"),
+    ("2", "portrait images only"),
+    ("3", "reset all"),
+    ("4", "go to the 1st image, in whatever applied sort"),
+    ("r", "reverse the current order"),
+    ("e", "sort by date (new to old)"),
+    ("d", "sort by date (old to new)"),
+    None,
+    ("p", "toggle play/pause"),
+    ("t", "pomodoro mode, delay increased to 25 minutes"),
+    ("y", "fast mode, delay decreased to 1 second"),
+    ("=  /  -", "increase / decrease delay by 1 second"),
+    ("+  /  _", "increase / decrease delay by 10 seconds"),
+    None,
+    ("?", "show this keymap"),
+    ("Esc", "hide this keymap"),
+]
 
-f                      toggle full screen mode
-v                      view image in file browser
-b                      bookmark current image
-0                      go to bookmarked image (or where the shuffle started)
 
-1                      landscape images only
-2                      portrait images only
-3                      reset all
-4                      go to the 1st image, in whatever applied sort
-r                      reverse the current order
-e                      sort by date (new to old)
-d                      sort by date (old to new)
-
-p                      toggle play/pause
-t                      pomodoro mode, delay increased to 25 minutes
-y                      fast mode, delay decreased to 1 second
-=  /  -                increase / decrease delay by 1 second
-+  /  _                increase / decrease delay by 10 seconds
-
-?                      show this keymap
-Esc                    hide this keymap"""
+def keymap_html() -> str:
+    """Render KEYMAP as a two-column table so it aligns in any font."""
+    rows = []
+    for item in KEYMAP:
+        if item is None:
+            rows.append('<tr><td colspan="2">&nbsp;</td></tr>')
+            continue
+        key, desc = item
+        rows.append(
+            '<tr><td align="right"><b>{}</b></td>'
+            '<td>&nbsp;&nbsp;&nbsp;{}</td></tr>'.format(
+                html.escape(key), html.escape(desc)))
+    return '<table cellpadding="3" cellspacing="0">{}</table>'.format(
+        "".join(rows))
 
 
 class ImageWidget(QWidget):
@@ -59,7 +78,7 @@ class ImageWidget(QWidget):
 
         # keymap overlay, hidden until ? is pressed
         self._help_overlay = QLabel(self)
-        self._help_overlay.setText("<pre>" + KEYMAP_HELP + "</pre>")
+        self._help_overlay.setText(keymap_html())
         self._help_overlay.setAlignment(Qt.AlignCenter)
         self._help_overlay.setStyleSheet(
             "background-color: rgba(0, 0, 0, 190); color: white;"

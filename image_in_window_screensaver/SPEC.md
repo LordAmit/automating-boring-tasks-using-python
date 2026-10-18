@@ -182,8 +182,9 @@ Acceptance criteria:
 1. `?` shows the overlay in both windowed and fullscreen mode; `Esc` hides it.
 2. The slideshow keeps advancing underneath, and every other key keeps
    working while the overlay is visible.
-3. The overlay text is a hand-maintained string in `image_widget.py` and
-   matches the readme Shortcuts table one for one.
+3. The overlay text is a hand-maintained key/description list in
+   `image_widget.py`, rendered as a two-column table, and matches the readme
+   Shortcuts table one for one.
 4. The overlay resizes with the window.
 
 Out of scope: pausing the slideshow, a separate draggable window, mouse
