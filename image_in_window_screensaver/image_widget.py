@@ -61,7 +61,7 @@ def keymap_html() -> str:
             '<tr><td align="right"><b>{}</b></td>'
             '<td>&nbsp;&nbsp;&nbsp;{}</td></tr>'.format(
                 html.escape(key), html.escape(desc)))
-    return '<table cellpadding="3" cellspacing="0">{}</table>'.format(
+    return '<table align="center" cellpadding="3" cellspacing="0">{}</table>'.format(
         "".join(rows))
 
 
